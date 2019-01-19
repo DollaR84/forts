@@ -142,7 +142,9 @@ class Base:
         diff_x = _x - obj.x
         diff_y = _y - obj.y
         result = False
-        if (obj.__class__.__name__ == 'TorpedoBoat') and ((abs(diff_x) > 2) or (abs(diff_y) > 2)):
+        if (obj.__class__.__name__ == 'Fort'):
+            result = False
+        elif (obj.__class__.__name__ == 'TorpedoBoat') and ((abs(diff_x) > 2) or (abs(diff_y) > 2)):
             result = False
         elif (abs(diff_x) > 1) or (abs(diff_y) > 1):
             result = False
@@ -197,6 +199,9 @@ class Base:
 
     def get_obj(self, _x, _y):
         """Return object on incoming coordinate."""
+        for fort in self.forts:
+            if (_x == fort.x) and (_y == fort.y):
+                return fort
         for mine in self.mines:
             if (_x == mine.x) and (_y == mine.y):
                 return mine
