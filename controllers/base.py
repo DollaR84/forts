@@ -142,7 +142,7 @@ class Base:
         diff_x = _x - obj.x
         diff_y = _y - obj.y
         result = False
-        if (obj.__class__.__name__ == 'Fort'):
+        if obj.__class__.__name__ == 'Fort':
             result = False
         elif (obj.__class__.__name__ == 'TorpedoBoat') and ((abs(diff_x) > 2) or (abs(diff_y) > 2)):
             result = False
