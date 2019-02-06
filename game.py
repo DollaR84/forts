@@ -75,6 +75,7 @@ class Game:
         """Run main loop game."""
         while self.running:
             self.handle_events()
+            self._ai.player.step()
             self.draw()
             self.check_win()
 
