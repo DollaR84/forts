@@ -9,3 +9,4 @@ F1 - help;
 F2 - on/off background sound;
 F5 - new game;
 F9 - change language;
+C - speak current coordinates;

@@ -58,6 +58,7 @@ class Game:
         self._ai = AI(self.board, self.speech, self.phrases)
         self.player = Player(self.board, self.speech, self.phrases, self._ai)
         self._ai.gamer = self.player
+        self._ai.player.behaviors.set_controllers(self._ai)
         self.running = True
         self.game_over = True
         self.win = False
@@ -106,6 +107,9 @@ class Game:
         elif pygame.K_SPACE == event.key:
             if not self.game_over and not self._ai.ai_step:
                 self.player.select()
+        elif pygame.K_c == event.key:
+            if not self.game_over and not self._ai.ai_step:
+                self.speech.speak(self.player.cell.pos)
         for key, num in self.handle_numbers.items():
             if getattr(pygame, key) == event.key:
                 if not self.game_over:
