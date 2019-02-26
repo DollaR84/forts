@@ -12,6 +12,7 @@ import random
 from itertools import product
 
 from controllers.base import Base
+from controllers.behaviors import Behavior
 
 from objects.fleets import Fleet
 
@@ -24,6 +25,8 @@ class Enemy(Base):
         super().__init__(board, speech, phrases, ai)
         self.fleet = None
         self.obj = None
+
+        self.behaviors = Behavior(self.board.cols, self.board.rows)
 
         random.seed()
 
@@ -39,8 +42,8 @@ class Enemy(Base):
 
     def create_fleets(self):
         """Create fleets ai enemy."""
-        self.ai.ai_step = True
-        self.ai.set_text(self.phrases['fleet_create_ai'])
+        self._ai.ai_step = True
+        self._ai.set_text(self.phrases['fleet_create_ai'])
         self.speech.speak(self.phrases['fleet_create_ai'])
         id_ships = []
         fleets = random.randint(0, 5)
@@ -67,7 +70,7 @@ class Enemy(Base):
             self.fleets.append(fleet)
             id_ships.clear()
         self.fix_coordinate_ships()
-        self.ai.create_fleets = False
+        self._ai.create_fleets = False
 
     def select_fleet(self, num):
         """Select fleet by number."""
@@ -77,10 +80,15 @@ class Enemy(Base):
         """Move fleet on board."""
         super().move_fleet(self.fleet, x, y)
         self.fleet = None
-        self.ai.next_step()
+        self._ai.next_step()
 
     def mover(self, _x, _y):  # pylint: disable=W0221
         """Move object on board."""
         super().mover(self.obj, _x, _y)
         self.obj = None
-        self.ai.next_step()
+        self._ai.next_step()
+
+    def step(self):
+        """AI step moving."""
+        if not self._ai.ai_step:
+            return
