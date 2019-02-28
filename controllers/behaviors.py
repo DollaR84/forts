@@ -21,6 +21,7 @@ class Unit:
         """Initialize unit class."""
         self.enemy = enemy
         self.obj = obj
+        self.fort = bool(obj.__class__.__name__ == 'Fort')
 
 
 class Behavior:
@@ -28,8 +29,11 @@ class Behavior:
 
     def __init__(self, cols, rows):
         """Initialize behavior class."""
+        self.cols = cols
+        self.rows = rows
+
         Coordinate = namedtuple('Coordinate', ['x', 'y'])
-        self.coordinates = [Coordinate(xy[0], xy[1]) for xy in list(product(range(cols), range(rows)))]
+        self.coordinates = [Coordinate(xy[0], xy[1]) for xy in list(product(range(self.cols), range(self.rows)))]
 
         self.player = None
         self.gamer = None
@@ -42,13 +46,26 @@ class Behavior:
         self.gamer = ai_.gamer
 
     def scan(self):
-        """Scan battle field and generate field for behaviors algoritms."""
+        """Scan battle field and return generated field for behaviors algoritms."""
+        field = [[None for _ in range(self.cols)] for _ in range(self.rows)]
         for coordinate in self.coordinates:
             player_obj = self.player.get_obj(coordinate.x, coordinate.y)
             gamer_obj = self.gamer.get_obj(coordinate.x, coordinate.y)
             if player_obj is not None:
-                self.field[coordinate.x][coordinate.y] = Unit(True, player_obj)
+                field[coordinate.x][coordinate.y] = Unit(True, player_obj)
             elif gamer_obj is not None:
-                self.field[coordinate.x][coordinate.y] = Unit(False, gamer_obj)
-            else:
-                self.field[coordinate.x][coordinate.y] = None
+                field[coordinate.x][coordinate.y] = Unit(False, gamer_obj)
+        return field
+
+    def generate_objects(self, field, enemy):
+        """Generate 2 list: forts and other objects player or ai."""
+        forts = []
+        objects = []
+        for row in field:
+            for unit in row:
+                if unit is not None and unit.enemy == enemy:
+                    if unit.fort:
+                        forts.append(unit.obj)
+                    else:
+                        objects.append(unit.obj)
+        return objects, forts
