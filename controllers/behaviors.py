@@ -7,11 +7,11 @@ Created on 06.02.2019
 
 """
 
-import random
-
 from collections import namedtuple
 
 from itertools import product
+
+from controllers.actions import Analysis
 
 
 class Unit:
@@ -38,7 +38,7 @@ class Behavior:
         self.player = None
         self.gamer = None
 
-        random.seed()
+        self.analysis = Analysis()
 
     def set_controllers(self, ai_):
         """Set controllers player and ai."""
@@ -69,3 +69,10 @@ class Behavior:
                     else:
                         objects.append(unit.obj)
         return objects, forts
+
+    def step(self):
+        """Main algorithm for ai action."""
+        self.analysis.field = self.scan()
+        self.analysis.p_objects, self.analysis.p_forts = self.generate_objects(self.analysis.field, False)
+        self.analysis.g_objects, self.analysis.g_forts = self.generate_objects(self.analysis.field, True)
+        self.analysis.run()
