@@ -149,8 +149,8 @@ class Base:
         elif (abs(diff_x) > 1) or (abs(diff_y) > 1):
             result = False
         else:
-            diff_x = self.diff2list(diff_x)
-            diff_y = self.diff2list(diff_y)
+            diff_x = diff2list(diff_x)
+            diff_y = diff2list(diff_y)
             for index in range(2):
                 obj._x += diff_x[index]
                 obj._y += diff_y[index]
@@ -178,14 +178,6 @@ class Base:
             result = self.move_fleet(self.select_fleet(obj.fleet), _x, _y)
         return result
 
-    @classmethod
-    def diff2list(cls, diff):
-        """Convert different to list."""
-        result = [0, 0]
-        for index in range(abs(diff)):
-            result[index] = int(math.copysign(1.0, diff))
-        return result
-
     def if_exists_forts(self):
         """Return status exists forts."""
         return bool(self.forts)
@@ -209,3 +201,11 @@ class Base:
             if (_x == torpedo.x) and (_y == torpedo.y):
                 return torpedo
         return self.get_ship(_x, _y)
+
+
+def diff2list(diff):
+    """Convert different to list."""
+    result = []
+    for _ in range(abs(diff)):
+        result.append(int(math.copysign(1.0, diff)))
+    return result
