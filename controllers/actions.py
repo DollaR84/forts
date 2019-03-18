@@ -18,17 +18,17 @@ Coordinate = namedtuple('Coordinate', ['x', 'y'])
 class Naming:
     """Set global variables."""
 
-    tactics = ('attack_fort', 'attack_object', 'defence', 'torpedo', 'mine')
+    tactics = ('attack_fort', 'attack_object', 'torpedo', 'mine')
 
 
 class Action:
     """Action state in object view."""
 
-    def __init__(self, obj, coordinates, priority, rate):
+    def __init__(self, obj, coordinates, tactic, rate):
         """Initialise action state."""
         self.object = obj
         self.coordinates = coordinates
-        self.priority = priority
+        self.priority = Naming.tactics.index(tactic)
         self.rate = rate
 
 
@@ -82,19 +82,15 @@ class Analysis:
         """Analysi attack on enemy object."""
         pass
 
-    def defence(self):
-        """Analysi needed defence ai fort."""
-        pass
-
     def torpedo(self):
         """Analysi torpedo attack on enemy object."""
-        self.base_analysis(self.p_torpedos, self.g_objects, 3)
+        self.base_analysis(self.p_torpedos, self.g_objects, self.torpedo.__name__)
 
     def mine(self):
         """Analysi mine attack on enemy object."""
-        self.base_analysis(self.p_mines, self.g_objects, 4)
+        self.base_analysis(self.p_mines, self.g_objects, self.mine.__name__)
 
-    def base_analysis(self, player_objects, enemy_objects, prior):
+    def base_analysis(self, player_objects, enemy_objects, tactic):
         """Base analysis tactic for battle."""
         best = None
         rate = 0
@@ -114,7 +110,7 @@ class Analysis:
                         temp_rate += 100
                     if temp_rate > rate:
                         rate = temp_rate
-                        best = Action(obj, (route[0], step2), prior, rate)
+                        best = Action(obj, (route[0], step2), tactic, rate)
         if best is not None:
             self.actions.append(best)
 
