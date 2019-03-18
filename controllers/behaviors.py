@@ -7,11 +7,10 @@ Created on 06.02.2019
 
 """
 
-from collections import namedtuple
-
 from itertools import product
 
 from controllers.actions import Analysis
+from controllers.actions import Coordinate
 
 
 class Unit:
@@ -32,18 +31,18 @@ class Behavior:
         self.cols = cols
         self.rows = rows
 
-        Coordinate = namedtuple('Coordinate', ['x', 'y'])
         self.coordinates = [Coordinate(xy[0], xy[1]) for xy in list(product(range(self.cols), range(self.rows)))]
 
         self.player = None
         self.gamer = None
-
-        self.analysis = Analysis()
+        self.analysis = None
 
     def set_controllers(self, ai_):
         """Set controllers player and ai."""
         self.player = ai_.player
         self.gamer = ai_.gamer
+
+        self.analysis = Analysis(self.player, self.gamer)
 
     def scan(self):
         """Scan battle field and return generated field for behaviors algoritms."""
@@ -57,7 +56,8 @@ class Behavior:
                 field[coordinate.x][coordinate.y] = Unit(False, gamer_obj)
         return field
 
-    def generate_objects(self, field, enemy):
+    @classmethod
+    def generate_objects(cls, field, enemy):
         """Generate 2 list: forts and other objects player or ai."""
         forts = []
         objects = []
