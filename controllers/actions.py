@@ -24,10 +24,10 @@ class Naming:
 class Action:
     """Action state in object view."""
 
-    def __init__(self, obj, coord, priority, rate):
+    def __init__(self, obj, coordinates, priority, rate):
         """Initialise action state."""
         self.object = obj
-        self.coordinate = coord
+        self.coordinates = coordinates
         self.priority = priority
         self.rate = rate
 
@@ -103,14 +103,18 @@ class Analysis:
             for route in routes:
                 empty = True
                 for coord in route:
-                    if self.player.get_object(coord.x, coord.y) is not None or self.enemy.get_object(coord.x, coord.y) is not None:
+                    if self.player.get_obj(coord.x, coord.y) is not None or self.enemy.get_obj(coord.x, coord.y) is not None:
                         empty = False
                         break
                 if empty:
                     temp_rate = 1000 - len(route) * 100
+                    step2 = None
+                    if obj.__class__.__name__ == 'TorpedoBoat':
+                        step2 = route[1]
+                        temp_rate += 100
                     if temp_rate > rate:
                         rate = temp_rate
-                        best = Action(obj, route[0], prior, rate)
+                        best = Action(obj, (route[0], step2), prior, rate)
         if best is not None:
             self.actions.append(best)
 
