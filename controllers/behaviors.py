@@ -75,4 +75,9 @@ class Behavior:
         self.analysis.field = self.scan()
         self.analysis.p_objects, self.analysis.p_forts = self.generate_objects(self.analysis.field, False)
         self.analysis.g_objects, self.analysis.g_forts = self.generate_objects(self.analysis.field, True)
-        self.analysis.run()
+        action = self.analysis.run()
+        self.run_best_action(action)
+
+    def run_best_action(self, action):
+        """Run best action for ai."""
+        pass
