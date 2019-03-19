@@ -71,16 +71,17 @@ class Analysis:
         for name in Naming.tactics:
             getattr(self, name)()
 
-        self.select_best_action()
+        best = self.get_best_action()
         self.clear()
+        return best
 
     def attack_fort(self):
         """Analysi attack on enemy fort."""
-        pass
+        self.base_analysis(self.p_ships, self.g_forts, self.attack_fort.__name__)
 
     def attack_object(self):
         """Analysi attack on enemy object."""
-        pass
+        self.base_analysis(self.p_ships, self.g_objects, self.attack_object.__name__)
 
     def torpedo(self):
         """Analysi torpedo attack on enemy object."""
@@ -104,6 +105,8 @@ class Analysis:
                         break
                 if empty:
                     temp_rate = 1000 - len(route) * 100
+                    if tactic == 'attack_fort':
+                        temp_rate += 500
                     step2 = None
                     if obj.__class__.__name__ == 'TorpedoBoat':
                         step2 = route[1]
@@ -141,10 +144,6 @@ class Analysis:
         main.pop()
         sub.pop()
 
-    def select_best_action(self):
-        """Select best actions from all actions."""
-        pass
-
     def get_best_action(self):
-        """Return best result analysis."""
+        """Return best actions from all actions."""
         pass
