@@ -108,7 +108,7 @@ class Analysis:
                     if tactic == 'attack_fort':
                         temp_rate += 500
                     step2 = None
-                    if obj.__class__.__name__ == 'TorpedoBoat':
+                    if (obj.__class__.__name__ == 'TorpedoBoat') and (len(route) > 1):
                         step2 = route[1]
                         temp_rate += 100
                     if temp_rate > rate:
