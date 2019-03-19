@@ -125,8 +125,9 @@ class Analysis:
             diff_x = diff2list(enemy.x - obj.x)
             diff_y = diff2list(enemy.y - obj.y)
             self.add_coordinates(diff_x, diff_y)
-            for index, _ in enumerate(diff_x):
-                route.append(Coordinate(diff_x[index], diff_y[index]))
+            route.append(Coordinate(obj.x + diff_x[0], obj.y + diff_y[0]))
+            for index in range(1, len(diff_x)):
+                route.append(Coordinate(route[index - 1].x + diff_x[index], route[index - 1].y + diff_y[index]))
             routes.append(route)
         return routes
 
@@ -146,4 +147,11 @@ class Analysis:
 
     def get_best_action(self):
         """Return best actions from all actions."""
-        pass
+        best = self.actions[0]
+        best_rate = best.rate - (best.priority * 100)
+        for action in self.actions:
+            rate = action.rate - (action.priority * 100)
+            if rate > best_rate:
+                best = action
+                best_rate = rate
+        return best
