@@ -157,7 +157,7 @@ class Player(Base):
         self.cell = self.board.get_cell(self._x, self._y)
         self.speak()
 
-    def speak(self):  # pylint:
+    def speak(self):
         """Speak objects on cell."""
         self.speech.speak(self.cell.pos)
         find = False
