@@ -151,9 +151,14 @@ class Base:
         else:
             diff_x = diff2list(diff_x)
             diff_y = diff2list(diff_y)
+            if len(diff_x) < 2:
+                diff_x.append(0)
+            if len(diff_y) < 2:
+                diff_y.append(0)
             for index in range(2):
-                obj._x += diff_x[index]
-                obj._y += diff_y[index]
+                obj.x += diff_x[index]
+                obj.y += diff_y[index]
+                self.speech.speak(self.board.get_cell(obj.x, obj.y).pos)
                 if self._ai.check_battle(id(self), obj):
                     self._ai.battle(id(self), obj)
                     break
