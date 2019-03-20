@@ -89,7 +89,7 @@ class Player(Base):
         if fleet is not None:
             self.light_zone(fleet.ships[0].x, fleet.ships[0].y)
             self.light = True
-            self.speech.speak(self.phrases['fleet_select'] + str(num))
+            self.speech.speak(self.phrases['fleet_select'] + str(fleet.num) + '. ' + str(fleet.get_ship_count()) + fleet.ships[0].name)
         else:
             self.speech.speak(self.phrases['fleet_none'])
 
@@ -196,9 +196,14 @@ class Player(Base):
 
     def select(self, shift=False):
         """Select object on board."""
-        self.select_obj()
         if self._ai.create_fleets:
+            self.select_obj()
             self.create_fleet(shift)
+        else:
+            if self.get_obj(self._x, self._y) is None and self.obj is not None:
+                self.mover(self.obj, self._x, self._y)
+            else:
+                self.select_obj()
 
     def create_fleet(self, shift):
         """Create fleet from ships."""
@@ -211,8 +216,10 @@ class Player(Base):
                     return
             self.obj.fleet = self.fleet.num
             self.fleet.add_ship(self.obj)
+            self.obj = None
             if shift:
                 self.fleets.append(self.fleet)
+                self.speech.speak(self.phrases['fleet_create'] % self.fleet.num)
                 self.fleet = None
                 self.obj = None
         else:
