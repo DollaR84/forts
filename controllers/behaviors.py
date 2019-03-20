@@ -80,6 +80,6 @@ class Behavior:
 
     def run_best_action(self, action):
         """Run best action for ai."""
-        self.player.move_obj(action.object, action.coordinate[0].x, action.coordinate[0].y)
+        self.player.mover(action.object, action.coordinate[0].x, action.coordinate[0].y)
         if action.coordinate[1] is not None:
-            self.player.move_obj(action.object, action.coordinate[1].x, action.coordinate[1].y)
+            self.player.mover(action.object, action.coordinate[1].x, action.coordinate[1].y)
