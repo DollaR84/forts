@@ -89,7 +89,7 @@ class Player(Base):
         if fleet is not None:
             self.light_zone(fleet.ships[0].x, fleet.ships[0].y)
             self.light = True
-            self.speech.speak(self.phrases['fleet_select'] + str(fleet.num) + '. ' + str(fleet.get_ship_count()) + fleet.ships[0].name)
+            self.speech.speak(self.phrases['fleet_select'] + str(fleet.num) + '. ' + fleet.ships[0].name + str(fleet.get_ships_count()))
         else:
             self.speech.speak(self.phrases['fleet_none'])
 
@@ -115,6 +115,8 @@ class Player(Base):
             zone = product(range(_x - 1, _x + 2), range(_y - 1, _y + 2))
         for _xy in zone:
             find = False
+            if (_xy[0] > (self.board.cols - 1)) or (_xy[1] > (self.board.rows - 1)):
+                find = True
             for ship in self.ships:
                 if _xy[0] == ship.x and _xy[1] == ship.y:
                     find = True
@@ -201,7 +203,7 @@ class Player(Base):
             self.create_fleet(shift)
         else:
             if self.get_obj(self._x, self._y) is None and self.obj is not None:
-                self.mover(self.obj, self._x, self._y)
+                self.mover(self._x, self._y)
             else:
                 self.select_obj()
 
