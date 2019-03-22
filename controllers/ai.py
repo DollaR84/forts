@@ -56,7 +56,7 @@ class AI:
     def get_controllers(self, id_controller):
         """Return player and enemy controllers."""
         first = self.player if id(self.player) == id_controller else self.gamer
-        second = self.gamer if id(self.gamer) == id_controller else self.player
+        second = self.gamer if id(self.player) == id_controller else self.player
         return {'player': first, 'enemy': second}
 
     @classmethod

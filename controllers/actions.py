@@ -7,6 +7,8 @@ Created on 11.03.2019
 
 """
 
+import random
+
 from collections import namedtuple
 
 from controllers.base import diff2list
@@ -50,6 +52,8 @@ class Analysis:
         self.g_objects = []
 
         self.actions = []
+
+        random.seed()
 
     def clear(self):
         """Clear temporary lists."""
@@ -142,8 +146,6 @@ class Analysis:
             sub = diff_x
         for _ in range(len(main) - len(sub)):
             sub.append(0)
-        main.pop()
-        sub.pop()
 
     def get_best_action(self):
         """Return best actions from all actions."""

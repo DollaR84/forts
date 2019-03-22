@@ -137,7 +137,7 @@ class Base:
                 return fleet
         return None
 
-    def move_obj(self, obj, _x, _y):
+    def move_obj(self, controller, obj, _x, _y):
         """Move object on input coordinate."""
         diff_x = _x - obj.x
         diff_y = _y - obj.y
@@ -152,35 +152,42 @@ class Base:
             diff_x = diff2list(diff_x)
             diff_y = diff2list(diff_y)
             if len(diff_x) < 2:
-                diff_x.append(0)
+                for _ in range(len(diff_x), 2):
+                    diff_x.append(0)
             if len(diff_y) < 2:
-                diff_y.append(0)
+                for _ in range(len(diff_y), 2):
+                    diff_y.append(0)
             for index in range(2):
                 obj.x += diff_x[index]
                 obj.y += diff_y[index]
                 self.speech.speak(self.board.get_cell(obj.x, obj.y).pos)
-                if self._ai.check_battle(id(self), obj):
-                    self._ai.battle(id(self), obj)
+                if self._ai.check_battle(id(controller), obj):
+                    self._ai.battle(id(controller), obj)
                     break
             result = True
         return result
 
-    def move_fleet(self, fleet, _x, _y):
+    def move_fleet(self, controller, fleet, _x, _y):
         """Move fleet on board."""
         result = True
         for ship in fleet.ships:
-            result = self.move_obj(ship, _x, _y)
+            result = self.move_obj(controller, ship, _x, _y)
             if not result:
                 break
         return result
 
-    def mover(self, obj, _x, _y):
+    def mover(self, controller, obj, _x, _y):
         """Move object or fleet on board."""
         result = False
         if (obj.__class__.__name__ == 'Mine') or (obj.__class__.__name__ == 'Torpedo') or (obj.fleet == 0):
-            result = self.move_obj(obj, _x, _y)
+            result = self.move_obj(controller, obj, _x, _y)
         else:
-            result = self.move_fleet(self.select_fleet(obj.fleet), _x, _y)
+            fleet = self.select_fleet(obj.fleet)
+            if fleet is None:
+                obj.fleet = 0
+                result = self.move_obj(controller, obj, _x, _y)
+            else:
+                result = self.move_fleet(controller, fleet, _x, _y)
         return result
 
     def if_exists_forts(self):

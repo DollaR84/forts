@@ -51,9 +51,9 @@ class Behavior:
             player_obj = self.player.get_obj(coordinate.x, coordinate.y)
             gamer_obj = self.gamer.get_obj(coordinate.x, coordinate.y)
             if player_obj is not None:
-                field[coordinate.x][coordinate.y] = Unit(True, player_obj)
+                field[coordinate.y][coordinate.x] = Unit(True, player_obj)
             elif gamer_obj is not None:
-                field[coordinate.x][coordinate.y] = Unit(False, gamer_obj)
+                field[coordinate.y][coordinate.x] = Unit(False, gamer_obj)
         return field
 
     @classmethod
@@ -80,6 +80,6 @@ class Behavior:
 
     def run_best_action(self, action):
         """Run best action for ai."""
-        self.player.mover(action.object, action.coordinate[0].x, action.coordinate[0].y)
-        if action.coordinate[1] is not None:
-            self.player.mover(action.object, action.coordinate[1].x, action.coordinate[1].y)
+        self.player.mover(action.object, action.coordinates[0].x, action.coordinates[0].y)
+        if action.coordinates[1] is not None:
+            self.player.mover(action.object, action.coordinates[1].x, action.coordinates[1].y)

@@ -74,7 +74,8 @@ class Player(Base):
 
     def mover(self, _x, _y):  # pylint: disable=W0221
         """Move object on board."""
-        if super().mover(self.obj, _x, _y):
+        if super().mover(self, self.obj, _x, _y):
+            self.fleet = None
             self.obj = None
             self.light = False
             self.light_cells.clear()

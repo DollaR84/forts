@@ -76,15 +76,10 @@ class Enemy(Base):
         """Select fleet by number."""
         self.fleet = super().select_fleet(num)
 
-    def move_fleet(self, fleet, x, y):
-        """Move fleet on board."""
-        super().move_fleet(self.fleet, x, y)
-        self.fleet = None
-        self._ai.next_step()
-
     def mover(self, _x, _y):  # pylint: disable=W0221
         """Move object on board."""
-        super().mover(self.obj, _x, _y)
+        super().mover(self, self.obj, _x, _y)
+        self.fleet = None
         self.obj = None
         self._ai.next_step()
 
@@ -92,3 +87,5 @@ class Enemy(Base):
         """AI step moving."""
         if not self._ai.ai_step:
             return
+        self.behaviors.step()
+        self._ai.next_step()
