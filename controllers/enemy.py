@@ -7,6 +7,7 @@ Created on 18.12.2018
 
 """
 
+import logging
 import random
 
 from itertools import product
@@ -23,6 +24,10 @@ class Enemy(Base):
     def __init__(self, board, speech, phrases, ai):
         """Initialize enemy controller."""
         super().__init__(board, speech, phrases, ai)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info('id controller: ' + str(id(self)))
+
         self.fleet = None
         self.obj = None
 
@@ -33,6 +38,8 @@ class Enemy(Base):
     def init(self):
         """Initialize ships and other objects for AI."""
         super().init()
+        self.log.info('def ' + self.init.__name__ + ': ' + self.init.__doc__)
+
         for index, fort in enumerate(self.forts):
             fort.x = self.board.cols - 1
             fort.y = 3 + index * 5
@@ -42,6 +49,8 @@ class Enemy(Base):
 
     def create_fleets(self):
         """Create fleets ai enemy."""
+        self.log.info('def ' + self.create_fleets.__name__ + ': ' + self.create_fleets.__doc__)
+
         self._ai.ai_step = True
         self._ai.set_text(self.phrases['fleet_create_ai'])
         self.speech.speak(self.phrases['fleet_create_ai'])
@@ -75,16 +84,21 @@ class Enemy(Base):
     def select_fleet(self, num):
         """Select fleet by number."""
         self.fleet = super().select_fleet(num)
+        self.log.info('def ' + self.select_fleet.__name__ + ': ' + self.select_fleet.__doc__)
 
     def mover(self, _x, _y):  # pylint: disable=W0221
         """Move object on board."""
         super().mover(self, self.obj, _x, _y)
+        self.log.info('def ' + self.mover.__name__ + ': ' + self.mover.__doc__)
+
         self.fleet = None
         self.obj = None
         self._ai.next_step()
 
     def step(self):
         """AI step moving."""
+        self.log.info('def ' + self.step.__name__ + ': ' + self.step.__doc__)
+
         if not self._ai.ai_step:
             return
         self.behaviors.step()

@@ -7,6 +7,8 @@ Created on 06.02.2019
 
 """
 
+import logging
+
 from itertools import product
 
 from controllers.actions import Analysis
@@ -18,6 +20,9 @@ class Unit:
 
     def __init__(self, enemy, obj):
         """Initialize unit class."""
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+
         self.enemy = enemy
         self.obj = obj
         self.fort = bool(obj.__class__.__name__ == 'Fort')
@@ -28,6 +33,9 @@ class Behavior:
 
     def __init__(self, cols, rows):
         """Initialize behavior class."""
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+
         self.cols = cols
         self.rows = rows
 
@@ -39,6 +47,8 @@ class Behavior:
 
     def set_controllers(self, ai_):
         """Set controllers player and ai."""
+        self.log.info('def ' + self.set_controllers.__name__ + ': ' + self.set_controllers.__doc__)
+
         self.player = ai_.player
         self.gamer = ai_.gamer
 
@@ -46,6 +56,8 @@ class Behavior:
 
     def scan(self):
         """Scan battle field and return generated field for behaviors algoritms."""
+        self.log.info('def ' + self.scan.__name__ + ': ' + self.scan.__doc__)
+
         field = [[None for _ in range(self.cols)] for _ in range(self.rows)]
         for coordinate in self.coordinates:
             player_obj = self.player.get_obj(coordinate.x, coordinate.y)
@@ -56,9 +68,10 @@ class Behavior:
                 field[coordinate.y][coordinate.x] = Unit(False, gamer_obj)
         return field
 
-    @classmethod
-    def generate_objects(cls, field, enemy):
+    def generate_objects(self, field, enemy):
         """Generate 2 list: forts and other objects player or ai."""
+        self.log.info('def ' + self.generate_objects.__name__ + ': ' + self.generate_objects.__doc__)
+
         forts = []
         objects = []
         for row in field:
@@ -72,6 +85,8 @@ class Behavior:
 
     def step(self):
         """Main algorithm for ai action."""
+        self.log.info('def ' + self.step.__name__ + ': ' + self.step.__doc__)
+
         self.analysis.field = self.scan()
         self.analysis.p_objects, self.analysis.p_forts = self.generate_objects(self.analysis.field, False)
         self.analysis.g_objects, self.analysis.g_forts = self.generate_objects(self.analysis.field, True)
@@ -80,6 +95,8 @@ class Behavior:
 
     def run_best_action(self, action):
         """Run best action for ai."""
+        self.log.info('def ' + self.run_best_action.__name__ + ': ' + self.run_best_action.__doc__)
+
         self.player.mover(action.object, action.coordinates[0].x, action.coordinates[0].y)
         if action.coordinates[1] is not None:
             self.player.mover(action.object, action.coordinates[1].x, action.coordinates[1].y)

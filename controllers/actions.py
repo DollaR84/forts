@@ -7,7 +7,7 @@ Created on 11.03.2019
 
 """
 
-import random
+import logging
 
 from collections import namedtuple
 
@@ -28,6 +28,9 @@ class Action:
 
     def __init__(self, obj, coordinates, tactic, rate):
         """Initialise action state."""
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+
         self.object = obj
         self.coordinates = coordinates
         self.priority = Naming.tactics.index(tactic)
@@ -39,6 +42,9 @@ class Analysis:
 
     def __init__(self, player, enemy):
         """Initialise analysis class."""
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+
         self.player = player
         self.enemy = enemy
 
@@ -53,10 +59,10 @@ class Analysis:
 
         self.actions = []
 
-        random.seed()
-
     def clear(self):
         """Clear temporary lists."""
+        self.log.info('def ' + self.clear.__name__ + ': ' + self.clear.__doc__)
+
         self.p_mines.clear()
         self.p_torpedos.clear()
         self.p_ships.clear()
@@ -64,6 +70,8 @@ class Analysis:
 
     def run(self):
         """Run analysis tactics."""
+        self.log.info('def ' + self.run.__name__ + ': ' + self.run.__doc__)
+
         for obj in self.p_objects:
             if obj.__class__.__name__ == 'Mine':
                 self.p_mines.append(obj)
@@ -81,22 +89,32 @@ class Analysis:
 
     def attack_fort(self):
         """Analysi attack on enemy fort."""
+        self.log.info('def ' + self.attack_fort.__name__ + ': ' + self.attack_fort.__doc__)
+
         self.base_analysis(self.p_ships, self.g_forts, self.attack_fort.__name__)
 
     def attack_object(self):
         """Analysi attack on enemy object."""
+        self.log.info('def ' + self.attack_object.__name__ + ': ' + self.attack_object.__doc__)
+
         self.base_analysis(self.p_ships, self.g_objects, self.attack_object.__name__)
 
     def torpedo(self):
         """Analysi torpedo attack on enemy object."""
+        self.log.info('def ' + self.torpedo.__name__ + ': ' + self.torpedo.__doc__)
+
         self.base_analysis(self.p_torpedos, self.g_objects, self.torpedo.__name__)
 
     def mine(self):
         """Analysi mine attack on enemy object."""
+        self.log.info('def ' + self.mine.__name__ + ': ' + self.mine.__doc__)
+
         self.base_analysis(self.p_mines, self.g_objects, self.mine.__name__)
 
     def base_analysis(self, player_objects, enemy_objects, tactic):
         """Base analysis tactic for battle."""
+        self.log.info('def ' + self.best_analysis.__name__ + ': ' + self.base_analysis.__doc__)
+
         best = None
         rate = 0
         for obj in player_objects:
@@ -123,6 +141,8 @@ class Analysis:
 
     def get_routes(self, obj, enemy_list):
         """Return routes from ai object to enemy objects."""
+        self.log.info('def ' + self.get_routes.__name__ + ': ' + self.get_routes.__doc__)
+
         routes = []
         for enemy in enemy_list:
             route = []
@@ -138,6 +158,8 @@ class Analysis:
     @classmethod
     def add_coordinates(cls, diff_x, diff_y):
         """Add coordinates for equel lists."""
+        self.log.info('def ' + self.add_coordinates.__name__ + ': ' + self.add_coordinates.__doc__)
+
         if len(diff_x) > len(diff_y):
             main = diff_x
             sub = diff_y
@@ -149,6 +171,8 @@ class Analysis:
 
     def get_best_action(self):
         """Return best actions from all actions."""
+        self.log.info('def ' + self.get_best_action.__name__ + ': ' + self.get_best_action.__doc__)
+
         best = self.actions[0]
         best_rate = best.rate - (best.priority * 100)
         for action in self.actions:

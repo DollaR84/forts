@@ -7,6 +7,8 @@ Created on 14.12.2018
 
 """
 
+import logging
+
 from objects.base import Base
 
 
@@ -18,6 +20,9 @@ class Ship(Base):
     def __init__(self, name, tex, symbol, rate):
         """Initialize base ship class."""
         super().__init__(name, tex, symbol)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+
         self.__rate = rate
         self.fleet = 0
 
@@ -28,6 +33,8 @@ class Battleship(Ship):
     def __init__(self, name, tex, symbol):
         """Initialize battleship class."""
         super().__init__(name, tex, symbol, 7)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
 
 
 class Cruiser(Ship):
@@ -36,6 +43,8 @@ class Cruiser(Ship):
     def __init__(self, name, tex, symbol):
         """Initialize cruiser class."""
         super().__init__(name, tex, symbol, 6)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
 
 
 class Destroyer(Ship):
@@ -44,6 +53,8 @@ class Destroyer(Ship):
     def __init__(self, name, tex, symbol):
         """Initialize destroyer class."""
         super().__init__(name, tex, symbol, 5)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
 
 
 class GuardBoat(Ship):
@@ -52,6 +63,8 @@ class GuardBoat(Ship):
     def __init__(self, name, tex, symbol):
         """Initialize guard boat class."""
         super().__init__(name, tex, symbol, 4)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
 
 
 class TorpedoBoat(Ship):
@@ -60,6 +73,8 @@ class TorpedoBoat(Ship):
     def __init__(self, name, tex, symbol):
         """Initialize torpedo boat class."""
         super().__init__(name, tex, symbol, 3)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
 
 
 class Trawler(Ship):
@@ -68,6 +83,8 @@ class Trawler(Ship):
     def __init__(self, name, tex, symbol):
         """Initialize trawler class."""
         super().__init__(name, tex, symbol, 2)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
 
 
 class Submarine(Ship):
@@ -76,3 +93,5 @@ class Submarine(Ship):
     def __init__(self, name, tex, symbol):
         """Initialize submarine class."""
         super().__init__(name, tex, symbol, 1)
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)

@@ -7,12 +7,17 @@ Created on 12.12.2018
 
 """
 
+import logging
+
 
 class Cell:
     """Cell class on board for forts."""
 
     def __init__(self, left, top, size, tex):
         """Initialize cell class."""
+        self.log = logging.getLogger()
+        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+
         self.left = left
         self.top = top
         self.size = size
