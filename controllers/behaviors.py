@@ -97,6 +97,8 @@ class Behavior:
         """Run best action for ai."""
         self.log.info('def ' + self.run_best_action.__name__ + ': ' + self.run_best_action.__doc__)
 
-        self.player.mover(action.object, action.coordinates[0].x, action.coordinates[0].y)
+        self.player.obj = action.object
+        self.player.mover(action.coordinates[0].x, action.coordinates[0].y)
         if action.coordinates[1] is not None:
-            self.player.mover(action.object, action.coordinates[1].x, action.coordinates[1].y)
+            self.player.mover(action.coordinates[1].x, action.coordinates[1].y)
+        self.player.obj = None

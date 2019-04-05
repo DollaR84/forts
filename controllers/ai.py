@@ -70,8 +70,7 @@ class AI:
         second = self.gamer if id(self.player) == id_controller else self.player
         return {'player': first, 'enemy': second}
 
-    @classmethod
-    def swap(cls, controllers, obj, enemy):
+    def swap(self, controllers, obj, enemy):
         """Return swap controllers, enemy, obj."""
         self.log.info('def ' + self.swap.__name__ + ': ' + self.swap.__doc__)
 

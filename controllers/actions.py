@@ -113,7 +113,7 @@ class Analysis:
 
     def base_analysis(self, player_objects, enemy_objects, tactic):
         """Base analysis tactic for battle."""
-        self.log.info('def ' + self.best_analysis.__name__ + ': ' + self.base_analysis.__doc__)
+        self.log.info('def ' + self.base_analysis.__name__ + ': ' + self.base_analysis.__doc__)
 
         best = None
         rate = 0
@@ -124,7 +124,6 @@ class Analysis:
                 for coord in route:
                     if self.player.get_obj(coord.x, coord.y) is not None or self.enemy.get_obj(coord.x, coord.y) is not None:
                         empty = False
-                        break
                 if empty:
                     temp_rate = 1000 - len(route) * 100
                     if tactic == 'attack_fort':
@@ -150,13 +149,12 @@ class Analysis:
             diff_y = diff2list(enemy.y - obj.y)
             self.add_coordinates(diff_x, diff_y)
             route.append(Coordinate(obj.x + diff_x[0], obj.y + diff_y[0]))
-            for index in range(1, len(diff_x)):
+            for index in range(1, len(diff_x) - 1):
                 route.append(Coordinate(route[index - 1].x + diff_x[index], route[index - 1].y + diff_y[index]))
             routes.append(route)
         return routes
 
-    @classmethod
-    def add_coordinates(cls, diff_x, diff_y):
+    def add_coordinates(self, diff_x, diff_y):
         """Add coordinates for equel lists."""
         self.log.info('def ' + self.add_coordinates.__name__ + ': ' + self.add_coordinates.__doc__)
 
