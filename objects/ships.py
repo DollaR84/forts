@@ -21,7 +21,7 @@ class Ship(Base):
         """Initialize base ship class."""
         super().__init__(name, tex, symbol)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.__rate = rate
         self.fleet = 0
@@ -34,7 +34,7 @@ class Battleship(Ship):
         """Initialize battleship class."""
         super().__init__(name, tex, symbol, 7)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class Cruiser(Ship):
@@ -44,7 +44,7 @@ class Cruiser(Ship):
         """Initialize cruiser class."""
         super().__init__(name, tex, symbol, 6)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class Destroyer(Ship):
@@ -54,7 +54,7 @@ class Destroyer(Ship):
         """Initialize destroyer class."""
         super().__init__(name, tex, symbol, 5)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class GuardBoat(Ship):
@@ -64,7 +64,7 @@ class GuardBoat(Ship):
         """Initialize guard boat class."""
         super().__init__(name, tex, symbol, 4)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class TorpedoBoat(Ship):
@@ -74,7 +74,7 @@ class TorpedoBoat(Ship):
         """Initialize torpedo boat class."""
         super().__init__(name, tex, symbol, 3)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class Trawler(Ship):
@@ -84,7 +84,7 @@ class Trawler(Ship):
         """Initialize trawler class."""
         super().__init__(name, tex, symbol, 2)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class Submarine(Ship):
@@ -94,4 +94,4 @@ class Submarine(Ship):
         """Initialize submarine class."""
         super().__init__(name, tex, symbol, 1)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)

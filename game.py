@@ -43,7 +43,7 @@ class Game:
         if self.config.getboolean('total', 'debug'):
             self.logger = Logger(os.path.splitext(__file__)[0])
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.size_x = self.config.getint('screen', 'size_x')
         self.size_y = self.config.getint('screen', 'size_y')
@@ -84,7 +84,7 @@ class Game:
 
     def mainloop(self):
         """Run main loop game."""
-        self.log.info('def ' + self.mainloop.__name__ + ': ' + self.mainloop.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.mainloop.__name__ + '(): ' + self.mainloop.__doc__)
 
         while self.running:
             self.handle_events()
@@ -175,7 +175,7 @@ class Game:
 
     def music_play(self):
         """Run music play."""
-        self.log.info('def ' + self.music_play.__name__ + ': ' + self.music_play.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.music_play.__name__ + '(): ' + self.music_play.__doc__)
 
         if self.config.getboolean('audio', 'music'):
             name = self.music.get_names()[0]
@@ -194,7 +194,7 @@ class Game:
 
     def new_game(self):
         """Start new game."""
-        self.log.info('def ' + self.new_game.__name__ + ': ' + self.new_game.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.new_game.__name__ + '(): ' + self.new_game.__doc__)
 
         self.speech.speak(self.phrases['new_game'])
         self.game_over = False
@@ -206,7 +206,7 @@ class Game:
 
     def help(self):
         """Speak help for keys control game."""
-        self.log.info('def ' + self.help.__name__ + ': ' + self.help.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.help.__name__ + '(): ' + self.help.__doc__)
 
         language = self.config.get('total', 'language')
         with open('help.dat', 'rb') as help_file:
@@ -220,7 +220,7 @@ class Game:
 
     def turn_music(self):
         """On or off music in game."""
-        self.log.info('def ' + self.turn_music.__name__ + ': ' + self.turn_music.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.turn_music.__name__ + '(): ' + self.turn_music.__doc__)
 
         if self.config.getboolean('audio', 'music'):
             self.config.set('audio', 'music', 'false')
@@ -235,7 +235,7 @@ class Game:
 
     def change_language(self):
         """Change language for phrases."""
-        self.log.info('def ' + self.change_language.__name__ + ': ' + self.change_language.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.change_language.__name__ + '(): ' + self.change_language.__doc__)
 
         if self.config.get('total', 'language') == 'ru':
             self.config.set('total', 'language', 'en')

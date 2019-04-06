@@ -16,7 +16,7 @@ class Cell:
     def __init__(self, left, top, size, tex):
         """Initialize cell class."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.left = left
         self.top = top

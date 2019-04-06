@@ -27,7 +27,7 @@ class Board:
     def __init__(self, config, screen, sounds):
         """Initialize board class."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.config = config
         self.screen = screen
@@ -52,13 +52,13 @@ class Board:
 
     def get_sizes(self):
         """Return calculated sizes x and y."""
-        self.log.info('def ' + self.get_sizes.__name__ + ': ' + self.get_sizes.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_sizes.__name__ + '(): ' + self.get_sizes.__doc__)
 
         return (self.cols * self.size_cell, self.rows * self.size_cell)
 
     def calc_offset(self):
         """Calculate position board on screen."""
-        self.log.info('def ' + self.calc_offset.__name__ + ': ' + self.calc_offset.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.calc_offset.__name__ + '(): ' + self.calc_offset.__doc__)
 
         board_sizes = self.get_sizes()
         board_x = board_sizes[0]
@@ -81,7 +81,7 @@ class Board:
 
     def create_cells(self):
         """Create cells."""
-        self.log.info('def ' + self.create_cells.__name__ + ': ' + self.create_cells.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.create_cells.__name__ + '(): ' + self.create_cells.__doc__)
 
         for row in range(self.rows):
             for col in range(self.cols):
@@ -92,7 +92,7 @@ class Board:
 
     def create_texts(self):
         """Create texts for rows and columns."""
-        self.log.info('def ' + self.create_texts.__name__ + ': ' + self.create_texts.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.create_texts.__name__ + '(): ' + self.create_texts.__doc__)
 
         self.font_obj = pygame.font.SysFont('arial', self.size_font)
         for index in range(self.rows):
@@ -110,7 +110,7 @@ class Board:
 
     def create_textures(self):
         """Create textures for objects."""
-        self.log.info('def ' + self.create_textures.__name__ + ': ' + self.create_textures.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.create_textures.__name__ + '(): ' + self.create_textures.__doc__)
 
         fort = pygame.Surface((self.size_cell, self.size_cell), pygame.SRCALPHA, 32)
         fort.fill((255, 255, 255, 0), None, pygame.BLEND_RGBA_MULT)
@@ -128,7 +128,7 @@ class Board:
 
     def convert_textures(self):
         """Convert textures for pygame."""
-        self.log.info('def ' + self.convert_textures.__name__ + ': ' + self.convert_textures.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.convert_textures.__name__ + '(): ' + self.convert_textures.__doc__)
 
         for name in list(self.textures.keys()):
             if name == 'water_6':
@@ -138,7 +138,7 @@ class Board:
 
     def get_cell(self, _x, _y):
         """Return cell from x and y coordinate."""
-        self.log.info('def ' + self.get_cell.__name__ + ': ' + self.get_cell.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_cell.__name__ + '(): ' + self.get_cell.__doc__)
 
         index = (_y * self.cols) + _x
         return self.cells[index]

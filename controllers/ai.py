@@ -24,7 +24,7 @@ class AI:
     def __init__(self, board, speech, phrases):
         """Initialize AI control."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.speech = speech
         self.phrases = phrases
@@ -41,7 +41,7 @@ class AI:
 
     def set_text(self, text):
         """Set text surface for render."""
-        self.log.info('def ' + self.set_text.__name__ + ': ' + self.set_text.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.set_text.__name__ + '(): ' + self.set_text.__doc__)
 
         self.text_obj = Text(self.font_obj, text, self.offset[0], self.offset[1], Colors.BLUE)
 
@@ -52,7 +52,7 @@ class AI:
 
     def next_step(self):
         """Speak who step next."""
-        self.log.info('def ' + self.next_step.__name__ + ': ' + self.next_step.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.next_step.__name__ + '(): ' + self.next_step.__doc__)
 
         self.ai_step = not self.ai_step
         if self.ai_step:
@@ -64,7 +64,7 @@ class AI:
 
     def get_controllers(self, id_controller):
         """Return player and enemy controllers."""
-        self.log.info('def ' + self.get_controllers.__name__ + ': ' + self.get_controllers.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_controllers.__name__ + '(): ' + self.get_controllers.__doc__)
 
         first = self.player if id(self.player) == id_controller else self.gamer
         second = self.gamer if id(self.player) == id_controller else self.player
@@ -72,13 +72,13 @@ class AI:
 
     def swap(self, controllers, obj, enemy):
         """Return swap controllers, enemy, obj."""
-        self.log.info('def ' + self.swap.__name__ + ': ' + self.swap.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.swap.__name__ + '(): ' + self.swap.__doc__)
 
         return {'player': controllers['enemy'], 'enemy': controllers['player']}, enemy, obj
 
     def get_enemy(self, controller, _x, _y):
         """Return enemy object arround coordinate."""
-        self.log.info('def ' + self.get_enemy.__name__ + ': ' + self.get_enemy.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_enemy.__name__ + '(): ' + self.get_enemy.__doc__)
 
         arround = list(product(range(_x - 1, _x + 2), range(_y - 1, _y + 2)))
         arround.remove((_x, _y))
@@ -90,7 +90,7 @@ class AI:
 
     def check_battle(self, id_controller, obj):
         """Check if running battle and return true, or return false if dont find battle."""
-        self.log.info('def ' + self.check_battle.__name__ + ': ' + self.check_battle.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.check_battle.__name__ + '(): ' + self.check_battle.__doc__)
 
         controllers = self.get_controllers(id_controller)
         if self.get_enemy(controllers['enemy'], obj.x, obj.y) is None:
@@ -99,7 +99,7 @@ class AI:
 
     def battle(self, id_controller, obj):
         """Run battle ships."""
-        self.log.info('def ' + self.battle.__name__ + ': ' + self.battle.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.battle.__name__ + '(): ' + self.battle.__doc__)
 
         controllers = self.get_controllers(id_controller)
         enemy = self.get_enemy(controllers['enemy'], obj.x, obj.y)
@@ -114,7 +114,7 @@ class AI:
 
     def fort_destroy(self, controllers, obj, enemy):
         """Destroy fort enemy."""
-        self.log.info('def ' + self.fort_destroy.__name__ + ': ' + self.fort_destroy.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.fort_destroy.__name__ + '(): ' + self.fort_destroy.__doc__)
 
         if obj.name != 'mine' and obj.name != 'torpedo':
             controllers['enemy'].forts.remove(enemy)
@@ -123,7 +123,7 @@ class AI:
 
     def torpedo_destroy(self, controllers, obj, enemy):
         """Destroy enemy object with torpedo."""
-        self.log.info('def ' + self.torpedo_destroy.__name__ + ': ' + self.torpedo_destroy.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.torpedo_destroy.__name__ + '(): ' + self.torpedo_destroy.__doc__)
 
         if enemy.__class__.__name__ == 'Torpedo':
             controllers, obj, enemy = self.swap(controllers, obj, enemy)
@@ -140,7 +140,7 @@ class AI:
 
     def mine_destroy(self, controllers, obj, enemy):
         """Destroy enemy object with mine."""
-        self.log.info('def ' + self.mine_destroy.__name__ + ': ' + self.mine_destroy.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.mine_destroy.__name__ + '(): ' + self.mine_destroy.__doc__)
 
         if enemy.__class__.__name__ == 'Mine':
             controllers, obj, enemy = self.swap(controllers, obj, enemy)
@@ -160,7 +160,7 @@ class AI:
 
     def ship_destroy(self, controllers, obj, enemy):
         """Destroy enemy object with ship."""
-        self.log.info('def ' + self.ship_destroy.__name__ + ': ' + self.ship_destroy.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.ship_destroy.__name__ + '(): ' + self.ship_destroy.__doc__)
 
         rate_obj = obj.rate if obj.fleet == 0 else controllers['player'].select_fleet(obj.fleet).get_ships_rate()
         rate_enemy = enemy.rate if enemy.fleet == 0 else controllers['enemy'].select_fleet(enemy.fleet).get_ships_rate()
@@ -182,7 +182,7 @@ class AI:
 
     def ship_remove(self, controller, ship):
         """Remove ship and fleet if destroy."""
-        self.log.info('def ' + self.ship_remove.__name__ + ': ' + self.ship_remove.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.ship_remove.__name__ + '(): ' + self.ship_remove.__doc__)
 
         fleet = None
         if ship.fleet != 0:

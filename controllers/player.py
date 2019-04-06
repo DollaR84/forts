@@ -31,8 +31,8 @@ class Player(Base):
         """Initialize player controller."""
         super().__init__(board, speech, phrases, ai)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
-        self.log.info('id controller: ' + str(id(self)))
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'id controller: ' + str(id(self)))
 
         self.color = Colors.BLACK
         self.fleet = None
@@ -43,7 +43,7 @@ class Player(Base):
     def init(self):
         """Initialize ships and other objects for player."""
         super().init()
-        self.log.info('def ' + self.init.__name__ + ': ' + self.init.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.init.__name__ + '(): ' + self.init.__doc__)
 
         for index, fort in enumerate(self.forts):
             fort.x = 0
@@ -61,7 +61,7 @@ class Player(Base):
     def reset(self):
         """Reset player variable."""
         super().reset()
-        self.log.info('def ' + self.reset.__name__ + ': ' + self.reset.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.reset.__name__ + '(): ' + self.reset.__doc__)
 
         self.light_cells.clear()
 
@@ -76,7 +76,7 @@ class Player(Base):
 
     def create_fleets(self):
         """Create fleets player."""
-        self.log.info('def ' + self.create_fleets.__name__ + ': ' + self.create_fleets.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.create_fleets.__name__ + '(): ' + self.create_fleets.__doc__)
 
         self._ai.set_text(self.phrases['fleet_create_your'])
         self.speech.speak(self.phrases['fleet_create_your'])
@@ -85,7 +85,7 @@ class Player(Base):
     def mover(self, _x, _y):  # pylint: disable=W0221
         """Move object on board."""
         result = super().mover(self, self.obj, _x, _y)
-        self.log.info('def ' + self.mover.__name__ + ': ' + self.mover.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.mover.__name__ + '(): ' + self.mover.__doc__)
 
         if result:
             self.fleet = None
@@ -100,7 +100,7 @@ class Player(Base):
     def select_fleet(self, num):
         """Select fleet by number."""
         fleet = super().select_fleet(num)
-        self.log.info('def ' + self.select_fleet.__name__ + ': ' + self.select_fleet.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.select_fleet.__name__ + '(): ' + self.select_fleet.__doc__)
 
         if fleet is not None:
             self.light_zone(fleet.ships[0].x, fleet.ships[0].y)
@@ -111,7 +111,7 @@ class Player(Base):
 
     def select_obj(self):
         """Select object by current coordinate."""
-        self.log.info('def ' + self.select_obj.__name__ + ': ' + self.select_obj.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.select_obj.__name__ + '(): ' + self.select_obj.__doc__)
 
         self.obj = self.get_obj(self._x, self._y)
         if self.obj is not None:
@@ -126,7 +126,7 @@ class Player(Base):
 
     def light_zone(self, _x, _y):
         """Light zone for moving objects."""
-        self.log.info('def ' + self.light_zone.__name__ + ': ' + self.light_zone.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.light_zone.__name__ + '(): ' + self.light_zone.__doc__)
 
         obj = self.get_obj(_x, _y)
         if obj.__class__.__name__ == 'TorpedoBoat':
@@ -154,7 +154,7 @@ class Player(Base):
 
     def move(self, move_dir):
         """Move cursor on board."""
-        self.log.info('def ' + self.move.__name__ + ': ' + self.move.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.move.__name__ + '(): ' + self.move.__doc__)
 
         if self._ai.ai_step:
             return
@@ -183,7 +183,7 @@ class Player(Base):
 
     def speak(self):
         """Speak objects on cell."""
-        self.log.info('def ' + self.speak.__name__ + ': ' + self.speak.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.speak.__name__ + '(): ' + self.speak.__doc__)
 
         self.speech.speak(self.cell.pos)
         find = False
@@ -222,7 +222,7 @@ class Player(Base):
 
     def select(self, shift=False):
         """Select object on board."""
-        self.log.info('def ' + self.select.__name__ + ': ' + self.select.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.select.__name__ + '(): ' + self.select.__doc__)
 
         if self._ai.create_fleets:
             self.select_obj()
@@ -235,7 +235,7 @@ class Player(Base):
 
     def create_fleet(self, shift):
         """Create fleet from ships."""
-        self.log.info('def ' + self.create_fleet.__name__ + ': ' + self.create_fleet.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.create_fleet.__name__ + '(): ' + self.create_fleet.__doc__)
 
         if self.obj is not None and (self.obj.__class__.__name__ != 'Mine') and (self.obj.__class__.__name__ != 'Torpedo'):
             if self.fleet is None:

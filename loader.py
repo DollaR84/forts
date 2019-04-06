@@ -16,7 +16,7 @@ import processes
 def textures():
     """Load textures from binary file."""
     log = logging.getLogger()
-    log.info('def ' + textures.__name__ + ': ' + textures.__doc__)
+    log.info(__name__ + ': ' + 'def ' + textures.__name__ + '(): ' + textures.__doc__)
 
     with open('textures.dat', 'rb') as tex_file:
         pictures = pickle.load(tex_file)
@@ -27,7 +27,7 @@ def textures():
 def sounds(volume):
     """Load sounds wav data from binary file."""
     log = logging.getLogger()
-    log.info('def ' + sounds.__name__ + ': ' + sounds.__doc__)
+    log.info(__name__ + ': ' + 'def ' + sounds.__name__ + '(): ' + sounds.__doc__)
 
     with open('sounds.dat', 'rb') as file_data:
         wavs = pickle.load(file_data)
@@ -38,7 +38,7 @@ def sounds(volume):
 def music():
     """Load music from binary file."""
     log = logging.getLogger()
-    log.info('def ' + music.__name__ + ': ' + music.__doc__)
+    log.info(__name__ + ': ' + 'def ' + music.__name__ + '(): ' + music.__doc__)
 
     with open('music.dat', 'rb') as file_data:
         return pickle.load(file_data)

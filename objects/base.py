@@ -20,7 +20,7 @@ class Base:
     def __init__(self, name, tex, symbol):
         """Initialize base class."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.__x = 0
         self.__y = 0

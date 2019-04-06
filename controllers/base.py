@@ -31,7 +31,7 @@ class Base:
     def __init__(self, board, speech, phrases, ai):
         """Initialize base controller."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.board = board
         self.speech = speech
@@ -52,7 +52,7 @@ class Base:
 
     def reset(self):
         """Reset local variable."""
-        self.log.info('def ' + self.reset.__name__ + ': ' + self.reset.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.reset.__name__ + '(): ' + self.reset.__doc__)
 
         self._x = 0
         self._y = 0
@@ -65,7 +65,7 @@ class Base:
 
     def init(self):
         """Initialize total for all controllers."""
-        self.log.info('def ' + self.init.__name__ + ': ' + self.init.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.init.__name__ + '(): ' + self.init.__doc__)
 
         self.reset()
         for _ in range(2):
@@ -85,7 +85,7 @@ class Base:
 
     def init_coordinates(self, zone_cells):
         """Initialize coordinate in objects."""
-        self.log.info('def ' + self.init_coordinates.__name__ + ': ' + self.init_coordinates.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.init_coordinates.__name__ + '(): ' + self.init_coordinates.__doc__)
 
         for ship in self.ships:
             cell = random.choice(zone_cells)
@@ -105,7 +105,7 @@ class Base:
 
     def fix_coordinate_ships(self):
         """Fix coordinate ships in fleets."""
-        self.log.info('def ' + self.fix_coordinate_ships.__name__ + ': ' + self.fix_coordinate_ships.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.fix_coordinate_ships.__name__ + '(): ' + self.fix_coordinate_ships.__doc__)
 
         for fleet in self.fleets:
             main = fleet.ships[0]
@@ -128,7 +128,7 @@ class Base:
 
     def get_empty_arround_cell(self, _x, _y):
         """Return list coordinate empty cells arround incoming cell."""
-        self.log.info('def ' + self.get_empty_arround_cell.__name__ + ': ' + self.get_empty_arround_cell.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_empty_arround_cell.__name__ + '(): ' + self.get_empty_arround_cell.__doc__)
 
         result = list(product(range(_x - 1, _x + 2), range(_y - 1, _y + 2)))
         for cell in result:
@@ -146,7 +146,7 @@ class Base:
 
     def select_fleet(self, num):
         """Select fleet of number."""
-        self.log.info('def ' + self.select_fleet.__name__ + ': ' + self.select_fleet.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.select_fleet.__name__ + '(): ' + self.select_fleet.__doc__)
 
         for fleet in self.fleets:
             if num == fleet.num:
@@ -155,7 +155,7 @@ class Base:
 
     def move_obj(self, controller, obj, _x, _y):
         """Move object on input coordinate."""
-        self.log.info('def ' + self.move_obj.__name__ + ': ' + self.move_obj.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.move_obj.__name__ + '(): ' + self.move_obj.__doc__)
 
         diff_x = _x - obj.x
         diff_y = _y - obj.y
@@ -187,7 +187,7 @@ class Base:
 
     def move_fleet(self, controller, fleet, _x, _y):
         """Move fleet on board."""
-        self.log.info('def ' + self.move_fleet.__name__ + ': ' + self.move_fleet.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.move_fleet.__name__ + '(): ' + self.move_fleet.__doc__)
 
         result = True
         for ship in fleet.ships:
@@ -198,7 +198,7 @@ class Base:
 
     def mover(self, controller, obj, _x, _y):
         """Move object or fleet on board."""
-        self.log.info('def ' + self.mover.__name__ + ': ' + self.mover.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.mover.__name__ + '(): ' + self.mover.__doc__)
 
         result = False
         if (obj.__class__.__name__ == 'Mine') or (obj.__class__.__name__ == 'Torpedo') or (obj.fleet == 0):
@@ -218,7 +218,7 @@ class Base:
 
     def get_ship(self, _x, _y):
         """Return ship on incoming coordinate."""
-        self.log.info('def ' + self.get_ship.__name__ + ': ' + self.get_ship.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_ship.__name__ + '(): ' + self.get_ship.__doc__)
 
         for ship in self.ships:
             if (_x == ship.x) and (_y == ship.y):
@@ -227,7 +227,7 @@ class Base:
 
     def get_obj(self, _x, _y):
         """Return object on incoming coordinate."""
-        self.log.info('def ' + self.get_obj.__name__ + ': ' + self.get_obj.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_obj.__name__ + '(): ' + self.get_obj.__doc__)
 
         for fort in self.forts:
             if (_x == fort.x) and (_y == fort.y):

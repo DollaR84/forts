@@ -19,7 +19,7 @@ class Fort(Base):
         """Initialise fort object."""
         super().__init__(name, tex, symbol)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class Mine(Base):
@@ -29,7 +29,7 @@ class Mine(Base):
         """Initialise mine object."""
         super().__init__(name, tex, symbol)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
 
 class Torpedo(Base):
@@ -39,4 +39,4 @@ class Torpedo(Base):
         """Initialise torpedo object."""
         super().__init__(name, tex, symbol)
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)

@@ -22,19 +22,19 @@ class Sound:
     def __init__(self, volume):
         """Initialize sound class."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.__sounds = loader.sounds(volume)
 
     def get_names(self):
         """Return names all sounds effects."""
-        self.log.info('def ' + self.get_names.__name__ + ': ' + self.get_names.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_names.__name__ + '(): ' + self.get_names.__doc__)
 
         return list(self.__sounds.keys())
 
     def play(self, name):
         """Play sound by name."""
-        self.log.info('def ' + self.play.__name__ + ': ' + self.play.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.play.__name__ + '(): ' + self.play.__doc__)
 
         self.__sounds[name].play()
 
@@ -45,20 +45,20 @@ class Music:
     def __init__(self, volume):
         """Initialize music class."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.__music = loader.music()
         pygame.mixer.music.set_volume(volume)
 
     def get_names(self):
         """Return names all musics in collect."""
-        self.log.info('def ' + self.get_names.__name__ + ': ' + self.get_names.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.get_names.__name__ + '(): ' + self.get_names.__doc__)
 
         return list(self.__music.keys())
 
     def play(self, name, loops=0):
         """Play music by name."""
-        self.log.info('def ' + self.play.__name__ + ': ' + self.play.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.play.__name__ + '(): ' + self.play.__doc__)
 
         pygame.mixer.music.load(io.BytesIO(self.__music[name]))
         pygame.mixer.music.play(loops)

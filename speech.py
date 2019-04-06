@@ -22,7 +22,7 @@ class Speech:
     def __init__(self, config):
         """Initialize speech class."""
         self.log = logging.getLogger()
-        self.log.info('def ' + self.__init__.__name__ + ': ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.config = config
 
@@ -51,13 +51,13 @@ class Speech:
 
     def finish(self):
         """Unload Tolk."""
-        self.log.info('def ' + self.finish.__name__ + ': ' + self.finish.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.finish.__name__ + '(): ' + self.finish.__doc__)
 
         Tolk.unload()
 
     def set_voice(self, index):
         """Set voice for speak."""
-        self.log.info('def ' + self.set_voice.__name__ + ': ' + self.set_voice.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.set_voice.__name__ + '(): ' + self.set_voice.__doc__)
 
         try:
             self.speaker.Voice = self.voices[index]
@@ -66,7 +66,7 @@ class Speech:
 
     def set_speak_out(self):
         """Set speak out: tolk or sapi."""
-        self.log.info('def ' + self.set_speak_out.__name__ + ': ' + self.set_speak_out.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.set_speak_out.__name__ + '(): ' + self.set_speak_out.__doc__)
 
         if self.error and self.sapi:
             self.speak = self.speak_sapi
@@ -75,14 +75,14 @@ class Speech:
 
     def speak_tolk(self, phrase):
         """Speak phrase with tolk."""
-        self.log.info('def ' + self.speak_tolk.__name__ + ': ' + self.speak_tolk.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.speak_tolk.__name__ + '(): ' + self.speak_tolk.__doc__)
         self.log.info('phrase: ' + phrase)
 
         Tolk.output(phrase)
 
     def speak_sapi(self, phrase):
         """Speak phrase in sapi voice."""
-        self.log.info('def ' + self.speak_sapi.__name__ + ': ' + self.speak_sapi.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.speak_sapi.__name__ + '(): ' + self.speak_sapi.__doc__)
         self.log.info('phrase: ' + phrase)
 
         self.speaker.skip("Sentence", sys.maxsize)
