@@ -102,4 +102,3 @@ class Enemy(Base):
         if not self._ai.ai_step:
             return
         self.behaviors.step()
-        self._ai.next_step()

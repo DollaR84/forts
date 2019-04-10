@@ -121,42 +121,36 @@ class AI:
             self.sounds.play('art_many')
             self.speech.speak(self.phrases['fort_captured'])
 
-    def torpedo_destroy(self, controllers, obj, enemy):
+    def torpedo_destroy(self, p_controllers, p_obj, p_enemy):
         """Destroy enemy object with torpedo."""
         self.log.info(__name__ + ': ' + 'def ' + self.torpedo_destroy.__name__ + '(): ' + self.torpedo_destroy.__doc__)
 
-        if enemy.__class__.__name__ == 'Torpedo':
-            controllers, obj, enemy = self.swap(controllers, obj, enemy)
+        if p_enemy.__class__.__name__ == 'Torpedo':
+            controllers, obj, enemy = self.swap(p_controllers, p_obj, p_enemy)
+        else:
+            controllers, obj, enemy = p_controllers, p_obj, p_enemy
         if enemy.__class__.__name__ != 'Mine' and enemy.__class__.__name__ != 'Torpedo':
             self.sounds.play('boom')
             controllers['player'].torpedos.remove(obj)
-            controllers['enemy'].ships.remove(enemy)
+            self.ship_remove(controllers['enemy'], enemy)
             self.sounds.play('destroy')
-            if enemy.fleet != 0:
-                fleet = controllers['enemy'].select_fleet(enemy.fleet)
-                if fleet is not None:
-                    fleet.remove(enemy)
-            self.speech.speak(self.phrases['ship_destroy'].format(enemy.name))
 
-    def mine_destroy(self, controllers, obj, enemy):
+    def mine_destroy(self, p_controllers, p_obj, p_enemy):
         """Destroy enemy object with mine."""
         self.log.info(__name__ + ': ' + 'def ' + self.mine_destroy.__name__ + '(): ' + self.mine_destroy.__doc__)
 
-        if enemy.__class__.__name__ == 'Mine':
-            controllers, obj, enemy = self.swap(controllers, obj, enemy)
+        if p_enemy.__class__.__name__ == 'Mine':
+            controllers, obj, enemy = self.swap(p_controllers, p_obj, p_enemy)
+        else:
+            controllers, obj, enemy = p_controllers, p_obj, p_enemy
         if enemy.__class__.__name__ != 'Mine' and enemy.__class__.__name__ != 'Torpedo':
             self.sounds.play('boom')
             controllers['player'].mines.remove(obj)
             if enemy.__class__.__name__ == 'Trawler':
                 self.speech.speak(self.phrases['mine_destroy'])
             else:
-                controllers['enemy'].ships.remove(enemy)
+                self.ship_remove(controllers['enemy'], enemy)
                 self.sounds.play('destroy')
-                if enemy.fleet != 0:
-                    fleet = controllers['enemy'].select_fleet(enemy.fleet)
-                    if fleet is not None:
-                        fleet.remove(enemy)
-                self.speech.speak(self.phrases['ship_destroy'].format(enemy.name))
 
     def ship_destroy(self, controllers, obj, enemy):
         """Destroy enemy object with ship."""
