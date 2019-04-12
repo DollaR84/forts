@@ -63,9 +63,9 @@ class Behavior:
             player_obj = self.player.get_obj(coordinate.x, coordinate.y)
             gamer_obj = self.gamer.get_obj(coordinate.x, coordinate.y)
             if player_obj is not None:
-                field[coordinate.y][coordinate.x] = Unit(True, player_obj)
+                field[coordinate.y][coordinate.x] = Unit(False, player_obj)
             elif gamer_obj is not None:
-                field[coordinate.y][coordinate.x] = Unit(False, gamer_obj)
+                field[coordinate.y][coordinate.x] = Unit(True, gamer_obj)
         return field
 
     def generate_objects(self, field, enemy):
