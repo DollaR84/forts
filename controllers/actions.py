@@ -9,12 +9,9 @@ Created on 11.03.2019
 
 import logging
 
-from collections import namedtuple
+import common
 
-from controllers.base import diff2list
-
-
-Coordinate = namedtuple('Coordinate', ['x', 'y'])
+import processes
 
 
 class Naming:
@@ -118,7 +115,7 @@ class Analysis:
         best = None
         rate = 0
         for obj in player_objects:
-            routes = self.get_routes(obj, enemy_objects)
+            routes = processes.get_routes(obj, enemy_objects)
             for route in routes:
                 empty = True
                 for coord in route:
@@ -137,35 +134,6 @@ class Analysis:
                         best = Action(obj, (route[0], step2), tactic, rate)
         if best is not None:
             self.actions.append(best)
-
-    def get_routes(self, obj, enemy_list):
-        """Return routes from ai object to enemy objects."""
-        self.log.info(__name__ + ': ' + 'def ' + self.get_routes.__name__ + '(): ' + self.get_routes.__doc__)
-
-        routes = []
-        for enemy in enemy_list:
-            route = []
-            diff_x = diff2list(enemy.x - obj.x)
-            diff_y = diff2list(enemy.y - obj.y)
-            self.add_coordinates(diff_x, diff_y)
-            route.append(Coordinate(obj.x + diff_x[0], obj.y + diff_y[0]))
-            for index in range(1, len(diff_x) - 1):
-                route.append(Coordinate(route[index - 1].x + diff_x[index], route[index - 1].y + diff_y[index]))
-            routes.append(route)
-        return routes
-
-    def add_coordinates(self, diff_x, diff_y):
-        """Add coordinates for equel lists."""
-        self.log.info(__name__ + ': ' + 'def ' + self.add_coordinates.__name__ + '(): ' + self.add_coordinates.__doc__)
-
-        if len(diff_x) > len(diff_y):
-            main = diff_x
-            sub = diff_y
-        else:
-            main = diff_y
-            sub = diff_x
-        for _ in range(len(main) - len(sub)):
-            sub.append(0)
 
     def get_best_action(self):
         """Return best actions from all actions."""

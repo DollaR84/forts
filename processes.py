@@ -14,6 +14,8 @@ import multiprocessing.pool
 
 from itertools import repeat
 
+import common
+
 import pygame
 
 
@@ -50,3 +52,25 @@ def sounds(data, volume):
     with multiprocessing.pool.ThreadPool() as pool:
         results = pool.starmap(__thread_sound, zip(data, repeat(volume)))
         return {name: wav for name, wav in results}
+
+
+def get_routes(obj, enemy_list):
+    """Return routes from ai object to enemy objects."""
+    log = logging.getLogger()
+    log.info(__name__ + ': ' + 'def ' + get_routes.__name__ + '(): ' + get_routes.__doc__)
+
+    with multiprocessing.pool.ThreadPool() as pool:
+        results = pool.starmap(__thread_route, zip(enemy_list, repeat(obj)))
+        return results
+
+
+def __thread_route(enemy, obj):
+    """Calculation route from obj to enemy."""
+    route = []
+    diff_x = common.diff2list(enemy.x - obj.x)
+    diff_y = common.diff2list(enemy.y - obj.y)
+    common.add_coordinates(diff_x, diff_y)
+    route.append(common.Coordinate(obj.x + diff_x[0], obj.y + diff_y[0]))
+    for index in range(1, len(diff_x) - 1):
+        route.append(common.Coordinate(route[index - 1].x + diff_x[index], route[index - 1].y + diff_y[index]))
+    return route
