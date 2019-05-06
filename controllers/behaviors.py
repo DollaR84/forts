@@ -11,8 +11,9 @@ import logging
 
 from itertools import product
 
+import common
+
 from controllers.actions import Analysis
-from controllers.actions import Coordinate
 
 
 class Unit:
@@ -39,7 +40,7 @@ class Behavior:
         self.cols = cols
         self.rows = rows
 
-        self.coordinates = [Coordinate(xy[0], xy[1]) for xy in list(product(range(self.cols), range(self.rows)))]
+        self.coordinates = [common.Coordinate(xy[0], xy[1]) for xy in list(product(range(self.cols), range(self.rows)))]
 
         self.player = None
         self.gamer = None

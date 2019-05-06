@@ -8,10 +8,11 @@ Created on 17.12.2018
 """
 
 import logging
-import math
 import random
 
 from itertools import product
+
+import common
 
 from objects.other import Fort
 from objects.other import Mine
@@ -167,8 +168,8 @@ class Base:
         elif (abs(diff_x) > 1) or (abs(diff_y) > 1):
             result = False
         else:
-            diff_x = diff2list(diff_x)
-            diff_y = diff2list(diff_y)
+            diff_x = common.diff2list(diff_x)
+            diff_y = common.diff2list(diff_y)
             if len(diff_x) < 2:
                 for _ in range(len(diff_x), 2):
                     diff_x.append(0)
@@ -239,11 +240,3 @@ class Base:
             if (_x == torpedo.x) and (_y == torpedo.y):
                 return torpedo
         return self.get_ship(_x, _y)
-
-
-def diff2list(diff):
-    """Convert different to list."""
-    result = []
-    for _ in range(abs(diff)):
-        result.append(int(math.copysign(1.0, diff)))
-    return result
