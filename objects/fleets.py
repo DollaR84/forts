@@ -25,6 +25,9 @@ class Fleet:
         """Add link ship to array."""
         self.log.info(__name__ + ': ' + 'def ' + self.add_ship.__name__ + '(): ' + self.add_ship.__doc__)
 
+        for obj in self.ships:
+            if id(obj) == id(ship):
+                return
         self.ships.append(ship)
 
     def get_ships_count(self):
