@@ -246,6 +246,7 @@ class Player(Base):
                     return
             self.obj.fleet = self.fleet.num
             self.fleet.add_ship(self.obj)
+            self.speech.speak(self.phrases['fleet_add'] % self.fleet.num)
             self.obj = None
             if shift:
                 self.fleets.append(self.fleet)
