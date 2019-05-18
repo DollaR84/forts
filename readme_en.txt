@@ -12,8 +12,4 @@ F9 - change language;
 C - speak current coordinates;
 Arrows up/down/left/right - move cursor on the field;
 Space on object - select object;
-In game mode:
 Space on empty cell field - move object on new position, if object is selected;
-In create fleets mode:
-Space+Shift on object - finish create fleet;
-Space+Shift on empty cell field - finish create fleets mode and go game mode;
