@@ -208,7 +208,7 @@ class AI:
         for f_ship in fleet.ships:
             self.sounds.play('destroy')
             self.speech.speak(self.phrases['ship_destroy'].format(f_ship.name))
-            fleet.ships.remove(ship)
+            fleet.ships.remove(f_ship)
             controller.ships.remove(f_ship)
         controller.fleets.remove(fleet)
 
