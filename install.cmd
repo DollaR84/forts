@@ -1,0 +1,25 @@
+pyinstaller -F --noconsole ^
+--add-binary controllers/actions.pyd;. ^
+--add-binary controllers/ai.pyd;. ^
+--add-binary controllers/base.pyd;. ^
+--add-binary controllers/behaviors.pyd;. ^
+--add-binary controllers/enemy.pyd;. ^
+--add-binary controllers/player.pyd;. ^
+--add-binary objects/base.pyd;. ^
+--add-binary objects/fleets.pyd;. ^
+--add-binary objects/other.pyd;. ^
+--add-binary objects/ships.pyd;. ^
+--add-binary objects/text.pyd;. ^
+--add-binary audio.pyd;. ^
+--add-binary board.pyd;. ^
+--add-binary cell.pyd;. ^
+--add-binary common.pyd;. ^
+--add-binary constants.pyd;. ^
+--add-binary game.pyd;. ^
+--add-binary loader.pyd;. ^
+--add-binary processes.pyd;. ^
+--add-binary speech.pyd;. ^
+--add-binary Tolk.pyd;. ^
+--add-binary utils.pyd;. ^
+--hidden-import pygame ^
+main.pyw
