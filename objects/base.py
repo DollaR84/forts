@@ -61,3 +61,9 @@ class Base:
         """Set y num cell coordinate."""
         self.__y = value
         self.__text = None
+
+    def __eq__(self, other):
+        """Comparasion two object id."""
+        if id(self) == id(other):
+            return True
+        return False

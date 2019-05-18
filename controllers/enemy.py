@@ -86,6 +86,9 @@ class Enemy(Base):
         self.fleet = super().select_fleet(num)
         self.log.info(__name__ + ': ' + 'def ' + self.select_fleet.__name__ + '(): ' + self.select_fleet.__doc__)
 
+        if self.fleet is not None:
+            self.obj = self.fleet.ships[0]
+
     def mover(self, _x, _y):  # pylint: disable=W0221
         """Move object on board."""
         super().mover(self, self.obj, _x, _y)
@@ -99,6 +102,4 @@ class Enemy(Base):
         """AI step moving."""
         self.log.info(__name__ + ': ' + 'def ' + self.step.__name__ + '(): ' + self.step.__doc__)
 
-        if not self._ai.ai_step:
-            return
         self.behaviors.step()

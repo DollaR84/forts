@@ -22,7 +22,7 @@ class Unit:
     def __init__(self, enemy, obj):
         """Initialize unit class."""
         self.log = logging.getLogger()
-        self.log.info(__name__ + ': ' + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
+        self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
         self.enemy = enemy
         self.obj = obj
@@ -99,7 +99,9 @@ class Behavior:
         self.log.info(__name__ + ': ' + 'def ' + self.run_best_action.__name__ + '(): ' + self.run_best_action.__doc__)
 
         self.player.obj = action.object
-        self.player.mover(action.coordinates[0].x, action.coordinates[0].y)
+        _x = action.coordinates[0].x
+        _y = action.coordinates[0].y
         if action.coordinates[1] is not None:
-            self.player.mover(action.coordinates[1].x, action.coordinates[1].y)
-        self.player.obj = None
+            _x += action.coordinates[1].x
+            _y += action.coordinates[1].y
+        self.player.mover(_x, _y)

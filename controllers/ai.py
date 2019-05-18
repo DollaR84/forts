@@ -36,7 +36,7 @@ class AI:
         self.offset = (board.screen_x // 2, board.size_font)
         self.gamer = None
         self.player = Enemy(board, speech, phrases, self)
-        self.ai_step = False
+        self.ai_step = True # if remove create_fleets else False
         self.create_fleets = False
 
     def set_text(self, text):
@@ -62,6 +62,12 @@ class AI:
             self.set_text(self.phrases['your_step'])
             self.speech.speak(self.phrases['your_step'])
 
+    def get_enemy_controller(self, id_controller):
+        """Return enemy controller."""
+        self.log.info(__name__ + ': ' + 'def ' + self.get_enemy_controller.__name__ + '(): ' + self.get_enemy_controller.__doc__)
+
+        return self.player if id(self.player) != id_controller else self.gamer
+
     def get_controllers(self, id_controller):
         """Return player and enemy controllers."""
         self.log.info(__name__ + ': ' + 'def ' + self.get_controllers.__name__ + '(): ' + self.get_controllers.__doc__)
@@ -85,6 +91,10 @@ class AI:
         for cell in arround:
             enemy_obj = controller.get_obj(cell[0], cell[1])
             if enemy_obj is not None:
+                controller.obj = enemy_obj
+                if not (enemy_obj.__class__.__name__ == 'Torpedo' or enemy_obj.__class__.__name__ == 'Mine'):
+                    if enemy_obj.fleet > 0:
+                        controller.fleet = controller.select_fleet(enemy_obj.fleet)
                 return enemy_obj
         return None
 
@@ -184,7 +194,7 @@ class AI:
         self.speech.speak(self.phrases['ship_destroy'].format(ship.name))
         controller.ships.remove(ship)
         fleet = None
-        if ship.fleet != 0:
+        if ship.fleet > 0:
             fleet = controller.select_fleet(ship.fleet)
         if fleet is not None:
             fleet.ships.remove(ship)
@@ -198,8 +208,8 @@ class AI:
         for f_ship in fleet.ships:
             self.sounds.play('destroy')
             self.speech.speak(self.phrases['ship_destroy'].format(f_ship.name))
+            fleet.ships.remove(ship)
             controller.ships.remove(f_ship)
-            fleet.ships.remove(f_ship)
         controller.fleets.remove(fleet)
 
     def get_controller_phrase(self, controller):

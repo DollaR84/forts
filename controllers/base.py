@@ -136,13 +136,38 @@ class Base:
             if (cell[0] == 0) or (cell[0] == self.board.cols - 1) or (cell[0] == self.board.cols // 2):
                 result.remove(cell)
                 continue
-            if (_x != cell[0]) and (_y != cell[1]):
-                result.remove(cell)
-                continue
             for ship in self.ships:
                 if (cell[0] == ship.x) and (cell[1] == ship.y):
                     result.remove(cell)
                     break
+            for mine in self.mines:
+                if (cell[0] == mine.x) and (cell[1] == mine.y):
+                    result.remove(cell)
+                    break
+            for torpedo in self.torpedos:
+                if (cell[0] == torpedo.x) and (cell[1] == torpedo.y):
+                    result.remove(cell)
+                    break
+        return result
+
+    def get_empty_arround_cell_move_fleet(self, _x, _y, diff_x, diff_y):
+        """Return list coordinate empty cells arround incoming cell for move fleet."""
+        self.log.info(__name__ + ': ' + 'def ' + self.get_empty_arround_cell_move_fleet.__name__ + '(): ' + self.get_empty_arround_cell_move_fleet.__doc__)
+
+        result = self.get_empty_arround_cell(_x, _y)
+        for cell in result:
+            if diff_x > 0 and cell[0] > _x:
+                result.remove(cell)
+                continue
+            if diff_x < 0 and cell[0] < _x:
+                result.remove(cell)
+                continue
+            if diff_y > 0 and cell[1] > _y:
+                result.remove(cell)
+                continue
+            if diff_y < 0 and cell[1] < _y:
+                result.remove(cell)
+                continue
         return result
 
     def select_fleet(self, num):
@@ -160,31 +185,29 @@ class Base:
 
         diff_x = _x - obj.x
         diff_y = _y - obj.y
-        result = False
         if obj.__class__.__name__ == 'Fort':
-            result = False
-        elif (obj.__class__.__name__ == 'TorpedoBoat') and ((abs(diff_x) > 2) or (abs(diff_y) > 2)):
-            result = False
-        elif (abs(diff_x) > 1) or (abs(diff_y) > 1):
-            result = False
-        else:
-            diff_x = common.diff2list(diff_x)
-            diff_y = common.diff2list(diff_y)
-            if len(diff_x) < 2:
-                for _ in range(len(diff_x), 2):
-                    diff_x.append(0)
-            if len(diff_y) < 2:
-                for _ in range(len(diff_y), 2):
-                    diff_y.append(0)
-            for index in range(2):
-                obj.x += diff_x[index]
-                obj.y += diff_y[index]
-                self.speech.speak(self.board.get_cell(obj.x, obj.y).pos)
-                if self._ai.check_battle(id(controller), obj):
-                    self._ai.battle(id(controller), obj)
-                    break
-            result = True
-        return result
+            return False
+        diff_x = common.diff2list(diff_x)
+        diff_y = common.diff2list(diff_y)
+        if len(diff_x) < 2:
+            for _ in range(len(diff_x), 2):
+                diff_x.append(0)
+        if len(diff_y) < 2:
+            for _ in range(len(diff_y), 2):
+                diff_y.append(0)
+        enemy = self._ai.get_enemy_controller(id(controller))
+        for index in range(2):
+            if enemy.get_obj(obj.x + diff_x[index], obj.y + diff_y[index]) is not None:
+                break
+            obj.x += diff_x[index]
+            obj.y += diff_y[index]
+            self.speech.speak(self.board.get_cell(obj.x, obj.y).pos)
+            if self._ai.check_battle(id(controller), obj):
+                self._ai.battle(id(controller), obj)
+                break
+            if obj.__class__.__name__ != 'TorpedoBoat':
+                break
+        return True
 
     def move_fleet(self, controller, fleet, _x, _y):
         """Move fleet on board."""
@@ -192,7 +215,8 @@ class Base:
 
         result = True
         for ship in fleet.ships:
-            result = self.move_obj(controller, ship, _x, _y)
+            arround = self.get_empty_arround_cell_move_fleet(_x, _y, _x-ship.x, _y-ship.y)
+            result = self.move_obj(controller, ship, arround[0][0], arround[0][1])
             if not result:
                 break
         return result
@@ -202,6 +226,8 @@ class Base:
         self.log.info(__name__ + ': ' + 'def ' + self.mover.__name__ + '(): ' + self.mover.__doc__)
 
         result = False
+        if obj is None:
+            return result
         if (obj.__class__.__name__ == 'Mine') or (obj.__class__.__name__ == 'Torpedo') or (obj.fleet == 0):
             result = self.move_obj(controller, obj, _x, _y)
         else:

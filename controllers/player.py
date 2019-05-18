@@ -99,13 +99,14 @@ class Player(Base):
 
     def select_fleet(self, num):
         """Select fleet by number."""
-        fleet = super().select_fleet(num)
+        self.fleet = super().select_fleet(num)
         self.log.info(__name__ + ': ' + 'def ' + self.select_fleet.__name__ + '(): ' + self.select_fleet.__doc__)
 
-        if fleet is not None:
-            self.light_zone(fleet.ships[0].x, fleet.ships[0].y)
+        if self.fleet is not None:
+            self.obj = self.fleet.ships[0]
+            self.light_zone(self.obj.x, self.obj.y)
             self.light = True
-            self.speech.speak(self.phrases['fleet_select'] + str(fleet.num) + '. ' + fleet.ships[0].name + str(fleet.get_ships_count()))
+            self.speech.speak(self.phrases['fleet_select'] + str(self.fleet.num) + '. ' + self.obj.name + str(self.fleet.get_ships_count()))
         else:
             self.speech.speak(self.phrases['fleet_none'])
 
