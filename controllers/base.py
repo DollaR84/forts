@@ -226,7 +226,7 @@ class Base:
         self.log.info(__name__ + ': ' + 'def ' + self.mover.__name__ + '(): ' + self.mover.__doc__)
 
         result = False
-        if obj is None:
+        if obj is None or obj.__class__.__name__ == 'Fort':
             return result
         if (obj.__class__.__name__ == 'Mine') or (obj.__class__.__name__ == 'Torpedo') or (obj.fleet == 0):
             result = self.move_obj(controller, obj, _x, _y)
