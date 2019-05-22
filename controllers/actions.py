@@ -8,6 +8,7 @@ Created on 11.03.2019
 """
 
 import logging
+import time
 
 import common
 
@@ -132,6 +133,7 @@ class Analysis:
                     if temp_rate > rate:
                         rate = temp_rate
                         best = Action(obj, (route[0], step2), tactic, rate)
+            time.sleep(0.1)
         if best is not None:
             self.actions.append(best)
 
