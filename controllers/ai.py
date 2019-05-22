@@ -170,7 +170,11 @@ class AI:
         rate_obj = obj.rate if obj.fleet == 0 else controllers['player'].select_fleet(obj.fleet).get_ships_rate()
         rate_enemy = enemy.rate if enemy.fleet == 0 else controllers['enemy'].select_fleet(enemy.fleet).get_ships_rate()
         self.sounds.play('art')
-        if rate_obj > rate_enemy:
+        if obj.__class__.__name__ == 'Submarine' and enemy.__class__.__name__ == 'Battleship':
+            self.ship_remove(controllers['enemy'], enemy, True)
+        elif obj.__class__.__name__ == 'Battleship' and enemy.__class__.__name__ == 'Submarine':
+            self.ship_remove(controllers['player'], obj, True)
+        elif rate_obj > rate_enemy:
             self.ship_remove(controllers['enemy'], enemy, True)
         elif rate_obj < rate_enemy:
             self.ship_remove(controllers['player'], obj, True)
