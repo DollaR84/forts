@@ -10,6 +10,7 @@ Created on 24.11.2018
 import logging
 import os
 import pickle
+import sys
 import time
 
 from configparser import ConfigParser
@@ -41,7 +42,10 @@ class Game:
         self.config.read('settings.ini')
 
         if self.config.getboolean('total', 'debug'):
-            self.logger = Logger(os.path.splitext(__file__)[0])
+            if getattr(sys, 'frozen', False):
+                self.logger = Logger(os.path.join(os.path.dirname(sys.executable), os.path.splitext(__file__)[0]))
+            else:
+                self.logger = Logger(os.path.join(os.getcwd(), os.path.splitext(__file__)[0]))
         self.log = logging.getLogger()
         self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
