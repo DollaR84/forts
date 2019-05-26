@@ -43,9 +43,9 @@ class Game:
 
         if self.config.getboolean('total', 'debug'):
             if getattr(sys, 'frozen', False):
-                self.logger = Logger(os.path.join(os.path.dirname(sys.executable), os.path.splitext(__file__)[0]))
+                self.logger = Logger(os.path.join(os.path.dirname(sys.executable), self.__class__.__name__))
             else:
-                self.logger = Logger(os.path.join(os.getcwd(), os.path.splitext(__file__)[0]))
+                self.logger = Logger(os.path.join(os.getcwd(), self.__class__.__name__))
         self.log = logging.getLogger()
         self.log.info(__name__ + ': ' + 'def ' + self.__init__.__name__ + '(): ' + self.__init__.__doc__)
 
