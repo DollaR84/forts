@@ -18,6 +18,7 @@ from controllers.actions import Analysis
 
 class Unit:
     """Aditional unit class."""
+    __slots__ = 'log', 'enemy', 'obj', 'fort'
 
     def __init__(self, enemy, obj):
         """Initialize unit class."""
@@ -102,6 +103,6 @@ class Behavior:
         _x = action.coordinates[0].x
         _y = action.coordinates[0].y
         if action.coordinates[1] is not None:
-            _x += action.coordinates[1].x
-            _y += action.coordinates[1].y
+            _x = action.coordinates[1].x
+            _y = action.coordinates[1].y
         self.player.mover(_x, _y)

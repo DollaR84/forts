@@ -23,6 +23,7 @@ class Naming:
 
 class Action:
     """Action state in object view."""
+    __slots__ = 'log', 'object', 'coordinates', 'priority', 'rate'
 
     def __init__(self, obj, coordinates, tactic, rate):
         """Initialise action state."""
