@@ -197,6 +197,8 @@ class Base:
                 diff_y.append(0)
         enemy = self._ai.get_enemy_controller(id(controller))
         for index in range(2):
+            if controller.get_obj(obj.x + diff_x[index], obj.y + diff_y[index]) is not None:
+                break
             if enemy.get_obj(obj.x + diff_x[index], obj.y + diff_y[index]) is not None:
                 break
             obj.x += diff_x[index]
