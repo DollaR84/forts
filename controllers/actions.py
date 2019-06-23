@@ -134,7 +134,7 @@ class Analysis:
                     if temp_rate > rate:
                         rate = temp_rate
                         best = Action(obj, (route[0], step2), tactic, rate)
-            time.sleep(0.1)
+            time.sleep(0.3)
         if best is not None:
             self.actions.append(best)
 
@@ -142,11 +142,13 @@ class Analysis:
         """Return best actions from all actions."""
         self.log.info(__name__ + ': ' + 'def ' + self.get_best_action.__name__ + '(): ' + self.get_best_action.__doc__)
 
-        best = self.actions[0]
-        best_rate = best.rate - (best.priority * 100)
-        for action in self.actions:
-            rate = action.rate - (action.priority * 100)
-            if rate > best_rate:
-                best = action
-                best_rate = rate
+        best = None
+        if self.actions:
+            best = self.actions[0]
+            best_rate = best.rate - (best.priority * 100)
+            for action in self.actions:
+                rate = action.rate - (action.priority * 100)
+                if rate > best_rate:
+                    best = action
+                    best_rate = rate
         return best

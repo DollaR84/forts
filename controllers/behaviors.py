@@ -93,7 +93,10 @@ class Behavior:
         self.analysis.p_objects, self.analysis.p_forts = self.generate_objects(self.analysis.field, False)
         self.analysis.g_objects, self.analysis.g_forts = self.generate_objects(self.analysis.field, True)
         action = self.analysis.run()
-        self.run_best_action(action)
+        if action is not None:
+            self.run_best_action(action)
+        else:
+            self.player._ai.next_step()
 
     def run_best_action(self, action):
         """Run best action for ai."""
