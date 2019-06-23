@@ -92,7 +92,7 @@ class AI:
             enemy_obj = controller.get_obj(cell[0], cell[1])
             if enemy_obj is not None:
                 controller.obj = enemy_obj
-                if not (enemy_obj.__class__.__name__ == 'Torpedo' or enemy_obj.__class__.__name__ == 'Mine'):
+                if not (enemy_obj.__class__.__name__ == 'Torpedo' or enemy_obj.__class__.__name__ == 'Mine' or enemy_obj.__class__.__name__ == 'Fort'):
                     if enemy_obj.fleet > 0:
                         controller.fleet = controller.select_fleet(enemy_obj.fleet)
                 return enemy_obj
