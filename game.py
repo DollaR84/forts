@@ -95,7 +95,8 @@ class Game:
             if self._ai.ai_step:
                 self._ai.player.step()
             self.draw()
-            self.check_win()
+            if not self.game_over:
+                self.check_win()
 
             self.clock.tick(15)
             pygame.display.flip()
