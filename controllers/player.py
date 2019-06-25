@@ -79,7 +79,7 @@ class Player(Base):
         self.log.info(__name__ + ': ' + 'def ' + self.create_fleets.__name__ + '(): ' + self.create_fleets.__doc__)
 
         self._ai.set_text(self.phrases['fleet_create_your'])
-        self.speech.speak(self.phrases['fleet_create_your'])
+        self.speech.speak(self.phrases['fleet_create_your'], True)
         self._ai.create_fleets = True
 
     def mover(self, _x, _y):  # pylint: disable=W0221
@@ -92,10 +92,10 @@ class Player(Base):
             self.obj = None
             self.light = False
             self.light_cells.clear()
-            self.speech.speak(self.phrases['move_true'])
+            self.speech.speak(self.phrases['move_true'], True)
             self._ai.next_step()
         else:
-            self.speech.speak(self.phrases['move_false'])
+            self.speech.speak(self.phrases['move_false'], True)
 
     def select_fleet(self, num):
         """Select fleet by number."""
@@ -106,9 +106,9 @@ class Player(Base):
             self.obj = self.fleet.ships[0]
             self.light_zone(self.obj.x, self.obj.y)
             self.light = True
-            self.speech.speak(self.phrases['fleet_select'] + str(self.fleet.num) + '. ' + self.obj.name + str(self.fleet.get_ships_count()))
+            self.speech.speak(self.phrases['fleet_select'] + str(self.fleet.num) + '. ' + self.obj.name + str(self.fleet.get_ships_count()), True)
         else:
-            self.speech.speak(self.phrases['fleet_none'])
+            self.speech.speak(self.phrases['fleet_none'], True)
 
     def select_obj(self):
         """Select object by current coordinate."""
@@ -121,9 +121,9 @@ class Player(Base):
                 return
             self.light_zone(self.obj.x, self.obj.y)
             self.light = True
-            self.speech.speak(self.phrases['select'] + self.obj.name)
+            self.speech.speak(self.phrases['select'] + self.obj.name, True)
         else:
-            self.speech.speak(self.phrases['select_none'])
+            self.speech.speak(self.phrases['select_none'], True)
 
     def light_zone(self, _x, _y):
         """Light zone for moving objects."""
@@ -163,22 +163,22 @@ class Player(Base):
             if self._x > 0:
                 self._x -= 1
             else:
-                self.speech.speak(self.phrases['border'])
+                self.speech.speak(self.phrases['border'], True)
         elif DIR.right == move_dir:
             if (self.board.cols - 1) > self._x:
                 self._x += 1
             else:
-                self.speech.speak(self.phrases['border'])
+                self.speech.speak(self.phrases['border'], True)
         elif DIR.down == move_dir:
             if (self.board.rows - 1) > self._y:
                 self._y += 1
             else:
-                self.speech.speak(self.phrases['border'])
+                self.speech.speak(self.phrases['border'], True)
         elif DIR.up == move_dir:
             if self._y > 0:
                 self._y -= 1
             else:
-                self.speech.speak(self.phrases['border'])
+                self.speech.speak(self.phrases['border'], True)
         self.cell = self.board.get_cell(self._x, self._y)
         self.speak()
 
@@ -186,7 +186,7 @@ class Player(Base):
         """Speak objects on cell."""
         self.log.info(__name__ + ': ' + 'def ' + self.speak.__name__ + '(): ' + self.speak.__doc__)
 
-        self.speech.speak(self.cell.pos)
+        self.speech.speak(self.cell.pos, False)
         find = False
         players = [self, self._ai.player]
         for player in players:
@@ -194,32 +194,32 @@ class Player(Base):
                 if (self._x == fort.x) and (self._y == fort.y):
                     find = True
                     if fort.show:
-                        self.speech.speak(fort.name)
+                        self.speech.speak(fort.name, True)
                     else:
-                        self.speech.speak(self.phrases['close'])
+                        self.speech.speak(self.phrases['close'], True)
             for mine in player.mines:
                 if (self._x == mine.x) and (self._y == mine.y):
                     find = True
                     if mine.show:
-                        self.speech.speak(mine.name)
+                        self.speech.speak(mine.name, True)
                     else:
-                        self.speech.speak(self.phrases['close'])
+                        self.speech.speak(self.phrases['close'], True)
             for torpedo in player.torpedos:
                 if (self._x == torpedo.x) and (self._y == torpedo.y):
                     find = True
                     if torpedo.show:
-                        self.speech.speak(torpedo.name)
+                        self.speech.speak(torpedo.name, True)
                     else:
-                        self.speech.speak(self.phrases['close'])
+                        self.speech.speak(self.phrases['close'], True)
             for ship in player.ships:
                 if (self._x == ship.x) and (self._y == ship.y):
                     find = True
                     if ship.show:
-                        self.speech.speak(ship.name)
+                        self.speech.speak(ship.name, True)
                     else:
-                        self.speech.speak(self.phrases['close'])
+                        self.speech.speak(self.phrases['close'], True)
         if not find:
-            self.speech.speak(self.phrases['empty'])
+            self.speech.speak(self.phrases['empty'], True)
 
     def select(self, shift=False):
         """Select object on board."""
@@ -243,15 +243,15 @@ class Player(Base):
                 self.fleet = Fleet(len(self.fleets) + 1)
             else:
                 if self.fleet.ships[0].rate != self.obj.rate:
-                    self.speech.speak(self.phrases['fleet_never'])
+                    self.speech.speak(self.phrases['fleet_never'], True)
                     return
             self.obj.fleet = self.fleet.num
             self.fleet.add_ship(self.obj)
-            self.speech.speak(self.phrases['fleet_add'] % self.fleet.num)
+            self.speech.speak(self.phrases['fleet_add'] % self.fleet.num, True)
             self.obj = None
             if shift:
                 self.fleets.append(self.fleet)
-                self.speech.speak(self.phrases['fleet_create'] % self.fleet.num)
+                self.speech.speak(self.phrases['fleet_create'] % self.fleet.num, True)
                 self.fleet = None
                 self.obj = None
         else:

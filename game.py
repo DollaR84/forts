@@ -11,7 +11,6 @@ import logging
 import os
 import pickle
 import sys
-import time
 
 from configparser import ConfigParser
 
@@ -56,7 +55,7 @@ class Game:
             self.phrases = pickle.load(lang_file)[self.config.get('total', 'language')]
 
         self.speech = Speech(self.config)
-        self.speech.speak(self.phrases['start'])
+        self.speech.speak(self.phrases['start'], True)
 
         pygame.init()
         pygame.font.init()
@@ -101,7 +100,7 @@ class Game:
             self.clock.tick(15)
             pygame.display.flip()
 
-        self.speech.speak(self.phrases['finish'])
+        self.speech.speak(self.phrases['finish'], True)
         self.speech.finish()
         if self.config.getboolean('total', 'debug'):
             self.logger.finish()
@@ -129,7 +128,7 @@ class Game:
                 self.player.select()
         elif pygame.K_c == event.key:
             if not self.game_over and not self._ai.ai_step:
-                self.speech.speak(self.player.cell.pos)
+                self.speech.speak(self.player.cell.pos, True)
         #for key, num in self.handle_numbers.items():
         #    if getattr(pygame, key) == event.key:
         #        if not self.game_over:
@@ -192,17 +191,17 @@ class Game:
         if not self._ai.player.if_exists_forts():
             self.game_over = True
             self.win = True
-            self.speech.speak(self.phrases['win'])
+            self.speech.speak(self.phrases['win'], True)
         elif not self.player.if_exists_forts():
             self.game_over = True
             self.win = False
-            self.speech.speak(self.phrases['game_over'])
+            self.speech.speak(self.phrases['game_over'], True)
 
     def new_game(self):
         """Start new game."""
         self.log.info(__name__ + ': ' + 'def ' + self.new_game.__name__ + '(): ' + self.new_game.__doc__)
 
-        self.speech.speak(self.phrases['new_game'])
+        self.speech.speak(self.phrases['new_game'], True)
         self.game_over = False
         self.win = False
         self._ai.player.init()
@@ -219,11 +218,7 @@ class Game:
         with open('help.dat', 'rb') as help_file:
             data = pickle.load(help_file)
             for line in [line for line in data[language] if line != '\n']:
-                self.speech.speak(line)
-
-                shift = len(line) // 5
-                timeout = shift * 0.3
-                time.sleep(timeout)
+                self.speech.speak(line, False)
 
     def turn_music(self):
         """On or off music in game."""
@@ -232,11 +227,11 @@ class Game:
         if self.config.getboolean('audio', 'music'):
             self.config.set('audio', 'music', 'false')
             pygame.mixer.music.stop()
-            self.speech.speak(self.phrases['music_off'])
+            self.speech.speak(self.phrases['music_off'], True)
         else:
             self.config.set('audio', 'music', 'true')
             self.music_play()
-            self.speech.speak(self.phrases['music_on'])
+            self.speech.speak(self.phrases['music_on'], True)
         with open('settings.ini', 'w') as config_file:
             self.config.write(config_file)
 
@@ -253,6 +248,6 @@ class Game:
             with open('languages.dat', 'rb') as lang_file:
                 self.phrases = pickle.load(lang_file)['ru']
         self.player.phrases = self.phrases
-        self.speech.speak(self.phrases['language'])
+        self.speech.speak(self.phrases['language'], True)
         with open('settings.ini', 'w') as config_file:
             self.config.write(config_file)

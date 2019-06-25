@@ -53,7 +53,7 @@ class Enemy(Base):
 
         self._ai.ai_step = True
         self._ai.set_text(self.phrases['fleet_create_ai'])
-        self.speech.speak(self.phrases['fleet_create_ai'])
+        self.speech.speak(self.phrases['fleet_create_ai'], True)
         id_ships = []
         fleets = random.randint(0, 5)
         for index in range(1, fleets + 1):

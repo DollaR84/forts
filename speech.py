@@ -9,7 +9,6 @@ Created on 22.11.2018
 
 import logging
 import sys
-import time
 
 import win32com.client
 
@@ -73,18 +72,20 @@ class Speech:
         else:
             self.speak = self.speak_tolk
 
-    def speak_tolk(self, phrase):
+    def speak_tolk(self, phrase, async):
         """Speak phrase with tolk."""
         self.log.info(__name__ + ': ' + 'def ' + self.speak_tolk.__name__ + '(): ' + self.speak_tolk.__doc__)
         self.log.info('phrase: ' + phrase)
 
         Tolk.output(phrase)
 
-    def speak_sapi(self, phrase):
+    def speak_sapi(self, phrase, async):
         """Speak phrase in sapi voice."""
         self.log.info(__name__ + ': ' + 'def ' + self.speak_sapi.__name__ + '(): ' + self.speak_sapi.__doc__)
         self.log.info('phrase: ' + phrase)
 
-        self.speaker.skip("Sentence", sys.maxsize)
-        self.speaker.Speak(phrase, self.svs_flags_async)
-        time.sleep(0.1)
+        if async:
+            self.speaker.skip("Sentence", sys.maxsize)
+            self.speaker.Speak(phrase, self.svs_flags_async)
+        else:
+            self.speaker.Speak(phrase)

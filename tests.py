@@ -29,7 +29,7 @@ class Speech:
     """Emulate speech class."""
 
     @classmethod
-    def speak(cls, phrase):
+    def speak(cls, phrase, async):
         """Emulate speak method."""
         print(phrase)
 
