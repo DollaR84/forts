@@ -203,7 +203,7 @@ class Base:
                 break
             obj.x += diff_x[index]
             obj.y += diff_y[index]
-            self.speech.speak(self.board.get_cell(obj.x, obj.y).pos, True)
+            self.speech.speak(self.board.get_cell(obj.x, obj.y).pos, False)
             if self._ai.check_battle(id(controller), obj):
                 self._ai.battle(id(controller), obj)
                 break
