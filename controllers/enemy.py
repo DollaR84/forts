@@ -32,6 +32,7 @@ class Enemy(Base):
         self.obj = None
 
         self.behaviors = Behavior(self.board.cols, self.board.rows)
+        self.step = self.behaviors.step
 
         random.seed()
 
@@ -98,8 +99,9 @@ class Enemy(Base):
         self.obj = None
         self._ai.next_step()
 
-    def step(self):
-        """AI step moving."""
-        self.log.info(__name__ + ': ' + 'def ' + self.step.__name__ + '(): ' + self.step.__doc__)
+    def info(self):
+        """Return count available forts and objects."""
+        self.log.info(__name__ + ': ' + 'def ' + self.info.__name__ + '(): ' + self.info.__doc__)
 
-        self.behaviors.step()
+        objects = len(self.ships) + len(self.torpedos) + len(self.mines)
+        return len(self.forts), objects

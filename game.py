@@ -129,6 +129,14 @@ class Game:
         elif pygame.K_c == event.key:
             if not self.game_over and not self._ai.ai_step:
                 self.speech.speak(self.player.cell.pos, True)
+        elif pygame.K_p == event.key:
+            if not self.game_over and not self._ai.ai_step:
+                phrase = self.phrases['your_info'] % self.player.info()
+                self.speech.speak(phrase, True)
+        elif pygame.K_e == event.key:
+            if not self.game_over and not self._ai.ai_step:
+                phrase = self.phrases['enemy_info'] % self._ai.player.info()
+                self.speech.speak(phrase, True)
         #for key, num in self.handle_numbers.items():
         #    if getattr(pygame, key) == event.key:
         #        if not self.game_over:
@@ -207,6 +215,7 @@ class Game:
         self._ai.player.init()
         self.player.init()
         #self.player.create_fleets()
+        self._ai.ai_step = True # if remove create_fleets
         self._ai.next_step() # if remove create_fleets
         self.player.speak()
 

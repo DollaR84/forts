@@ -259,3 +259,9 @@ class Player(Base):
                 self.fix_coordinate_ships()
                 self._ai.player.create_fleets()
                 self._ai.next_step()
+
+    def info(self):
+        """Return count available forts and objects."""
+        self.log.info(__name__ + ': ' + 'def ' + self.info.__name__ + '(): ' + self.info.__doc__)
+
+        return len(self.forts), len(self.ships), len(self.torpedos), len(self.mines)
