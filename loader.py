@@ -42,3 +42,33 @@ def music():
 
     with open('music.dat', 'rb') as file_data:
         return pickle.load(file_data)
+
+
+def load_cache():
+    """Load textures, cells and texts objects from cache file."""
+    log = logging.getLogger()
+    log.info(__name__ + ': ' + 'def ' + load_cache.__name__ + '(): ' + load_cache.__doc__)
+
+    try:
+        cache_file = open('cache.dat', 'rb')
+    except IOError as e:
+        return None
+    else:
+        with cache_file:
+            data = pickle.load(cache_file)
+            return data
+
+
+def save_cache(sizes, textures, cells, texts):
+    """Save textures, cells and texts objects in cache file."""
+    log = logging.getLogger()
+    log.info(__name__ + ': ' + 'def ' + save_cache.__name__ + '(): ' + save_cache.__doc__)
+
+    data = load_cache()
+    if data is not None:
+        if (data['sizes'][0] == sizes[0]) and (data['sizes'][1] == sizes[1]):
+            return
+
+    data = {'sizes': sizes, 'textures': textures, 'cells': cells, 'texts': texts}
+    with open('cache.dat', 'wb') as save_file:
+        pickle.dump(data, save_file)

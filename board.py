@@ -39,16 +39,49 @@ class Board:
         self.cols = self.config.getint('board', 'cols')
         self.size_cell = self.config.getint('board', 'size_cell')
         self.size_font = self.config.getint('board', 'size_font')
-        self.cells = []
-        self.text_obj = []
-        self.textures = loader.textures()
-        self.board = pygame.Surface(self.get_sizes())
 
-        self.create_textures()
-        self.convert_textures()
+        self.font_obj = pygame.font.SysFont('arial', self.size_font)
+
+        self.creator()
+
+    def creator(self):
+        """Create textures, cells and texts objects or loading from cache."""
+        self.log.info(__name__ + ': ' + 'def ' + self.creator.__name__ + '(): ' + self.creator.__doc__)
+
+        self.board = pygame.Surface(self.get_sizes())
         self.calc_offset()
-        self.create_cells()
-        self.create_texts()
+
+        data = loader.load_cache()
+        if data is None:
+            self.cells = []
+            self.text_obj = []
+            self.textures = loader.textures()
+
+            self.create_textures()
+            self.convert_textures()
+            self.create_cells()
+            self.create_texts()
+        else:
+            self.textures = {}
+            for name in list(data['textures'].keys()):
+                if name == 'water_6':
+                    self.textures[name] = pygame.image.fromstring(data['textures'][name][0], data['textures'][name][1], 'RGB')
+                else:
+                    self.textures[name] = pygame.image.fromstring(data['textures'][name][0], data['textures'][name][1], 'RGBA')
+            self.cells = data['cells']
+            self.text_obj = data['texts']
+
+    def finish(self):
+        """Save textures, cells and texts objects in cache file."""
+        self.log.info(__name__ + ': ' + 'def ' + self.finish.__name__ + '(): ' + self.finish.__doc__)
+
+        textures = {}
+        for name in list(self.textures.keys()):
+            if name == 'water_6':
+                textures[name] = (pygame.image.tostring(self.textures[name], 'RGB'), self.textures[name].get_size())
+            else:
+                textures[name] = (pygame.image.tostring(self.textures[name], 'RGBA'), self.textures[name].get_size())
+        loader.save_cache(self.get_sizes(), textures, self.cells, self.text_obj)
 
     def get_sizes(self):
         """Return calculated sizes x and y."""
@@ -94,7 +127,6 @@ class Board:
         """Create texts for rows and columns."""
         self.log.info(__name__ + ': ' + 'def ' + self.create_texts.__name__ + '(): ' + self.create_texts.__doc__)
 
-        self.font_obj = pygame.font.SysFont('arial', self.size_font)
         for index in range(self.rows):
             _x1 = self.offset[0] // 2
             _x2 = self.screen_x - _x1

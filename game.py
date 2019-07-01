@@ -102,6 +102,7 @@ class Game:
 
         self.speech.speak(self.phrases['finish'], True)
         self.speech.finish()
+        self.board.finish()
         if self.config.getboolean('total', 'debug'):
             self.logger.finish()
         pygame.quit()
