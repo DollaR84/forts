@@ -64,11 +64,6 @@ def save_cache(sizes, textures, cells, texts):
     log = logging.getLogger()
     log.info(__name__ + ': ' + 'def ' + save_cache.__name__ + '(): ' + save_cache.__doc__)
 
-    data = load_cache()
-    if data is not None:
-        if (data['sizes'][0] == sizes[0]) and (data['sizes'][1] == sizes[1]):
-            return
-
     data = {'sizes': sizes, 'textures': textures, 'cells': cells, 'texts': texts}
     with open('cache.dat', 'wb') as save_file:
         pickle.dump(data, save_file)
