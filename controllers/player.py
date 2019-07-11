@@ -87,9 +87,9 @@ class Player(Base):
         result = super().mover(self, self.obj, _x, _y)
         self.log.info(__name__ + ': ' + 'def ' + self.mover.__name__ + '(): ' + self.mover.__doc__)
 
+        self.fleet = None
+        self.obj = None
         if result:
-            self.fleet = None
-            self.obj = None
             self.light = False
             self.light_cells.clear()
             self.speech.speak(self.phrases['move_true'], True)
@@ -229,7 +229,7 @@ class Player(Base):
             self.select_obj()
             self.create_fleet(shift)
         else:
-            if self.get_obj(self._x, self._y) is None and self.obj is not None:
+            if self.obj is not None and self.get_obj(self._x, self._y) is None:
                 self.mover(self._x, self._y)
             else:
                 self.select_obj()
@@ -249,9 +249,16 @@ class Player(Base):
             self.fleet.add_ship(self.obj)
             self.speech.speak(self.phrases['fleet_add'] % self.fleet.num, True)
             self.obj = None
+            if self.fleet.get_ships_count() == 3:
+                shift = True
             if shift:
-                self.fleets.append(self.fleet)
-                self.speech.speak(self.phrases['fleet_create'] % self.fleet.num, True)
+                if self.fleet.get_ships_count() == 1:
+                    ship = self.fleet.ships.pop(0)
+                    ship.fleet = 0
+                    self.speech.speak(self.phrases['fleet_one'], True)
+                else:
+                    self.fleets.append(self.fleet)
+                    self.speech.speak(self.phrases['fleet_create'] % self.fleet.num, True)
                 self.fleet = None
                 self.obj = None
         else:

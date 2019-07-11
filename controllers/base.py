@@ -109,9 +109,8 @@ class Base:
         self.log.info(__name__ + ': ' + 'def ' + self.fix_coordinate_ships.__name__ + '(): ' + self.fix_coordinate_ships.__doc__)
 
         for fleet in self.fleets:
-            main = fleet.ships[0]
             for index in range(1, len(fleet.ships)):
-                arround = self.get_empty_arround_cell(main.x, main.y)
+                arround = self.get_empty_arround_cell(fleet.ships[index-1].x, fleet.ships[index-1].y)
                 if arround:
                     fleet.ships[index].x = arround[0][0]
                     fleet.ships[index].y = arround[0][1]
@@ -131,43 +130,17 @@ class Base:
         """Return list coordinate empty cells arround incoming cell."""
         self.log.info(__name__ + ': ' + 'def ' + self.get_empty_arround_cell.__name__ + '(): ' + self.get_empty_arround_cell.__doc__)
 
-        result = list(product(range(_x - 1, _x + 2), range(_y - 1, _y + 2)))
-        for cell in result:
+        result = []
+        for cell in list(product(range(_x - 1, _x + 2), range(_y - 1, _y + 2))):
+            if (cell[0] < 0) or (cell[0] > self.board.cols - 1):
+                continue
+            if (cell[1] < 0) or (cell[1] > self.board.rows - 1):
+                continue
             if (cell[0] == 0) or (cell[0] == self.board.cols - 1) or (cell[0] == self.board.cols // 2):
-                result.remove(cell)
                 continue
-            for ship in self.ships:
-                if (cell[0] == ship.x) and (cell[1] == ship.y):
-                    result.remove(cell)
-                    break
-            for mine in self.mines:
-                if (cell[0] == mine.x) and (cell[1] == mine.y):
-                    result.remove(cell)
-                    break
-            for torpedo in self.torpedos:
-                if (cell[0] == torpedo.x) and (cell[1] == torpedo.y):
-                    result.remove(cell)
-                    break
-        return result
-
-    def get_empty_arround_cell_move_fleet(self, _x, _y, diff_x, diff_y):
-        """Return list coordinate empty cells arround incoming cell for move fleet."""
-        self.log.info(__name__ + ': ' + 'def ' + self.get_empty_arround_cell_move_fleet.__name__ + '(): ' + self.get_empty_arround_cell_move_fleet.__doc__)
-
-        result = self.get_empty_arround_cell(_x, _y)
-        for cell in result:
-            if diff_x > 0 and cell[0] > _x:
-                result.remove(cell)
+            if self.get_obj(cell[0], cell[1]) is not None:
                 continue
-            if diff_x < 0 and cell[0] < _x:
-                result.remove(cell)
-                continue
-            if diff_y > 0 and cell[1] > _y:
-                result.remove(cell)
-                continue
-            if diff_y < 0 and cell[1] < _y:
-                result.remove(cell)
-                continue
+            result.append(cell)
         return result
 
     def select_fleet(self, num):
@@ -204,9 +177,6 @@ class Base:
             obj.x += diff_x[index]
             obj.y += diff_y[index]
             self.speech.speak(self.board.get_cell(obj.x, obj.y).pos, False)
-            if self._ai.check_battle(id(controller), obj):
-                self._ai.battle(id(controller), obj)
-                break
             if obj.__class__.__name__ != 'TorpedoBoat':
                 break
         return True
@@ -217,8 +187,7 @@ class Base:
 
         result = True
         for ship in fleet.ships:
-            arround = self.get_empty_arround_cell_move_fleet(_x, _y, _x-ship.x, _y-ship.y)
-            result = self.move_obj(controller, ship, arround[0][0], arround[0][1])
+            result = self.move_obj(controller, ship, _x, _y)
             if not result:
                 break
         return result
@@ -233,12 +202,19 @@ class Base:
         if (obj.__class__.__name__ == 'Mine') or (obj.__class__.__name__ == 'Torpedo') or (obj.fleet == 0):
             result = self.move_obj(controller, obj, _x, _y)
         else:
-            fleet = self.select_fleet(obj.fleet)
+            fleet = controller.fleet
             if fleet is None:
                 obj.fleet = 0
                 result = self.move_obj(controller, obj, _x, _y)
             else:
                 result = self.move_fleet(controller, fleet, _x, _y)
+
+        if self._ai.check_battle(id(controller), obj):
+            self._ai.battle(id(controller), obj)
+        if controller.fleet is not None:
+            for ship in controller.fleet.ships:
+                if self._ai.check_battle(id(controller), ship):
+                    self._ai.battle(id(controller), ship)
         return result
 
     def if_exists_forts(self):
@@ -268,3 +244,19 @@ class Base:
             if (_x == torpedo.x) and (_y == torpedo.y):
                 return torpedo
         return self.get_ship(_x, _y)
+
+    def del_obj(self, obj):
+        """Remove link obj from array."""
+        self.log.info(__name__ + ': ' + 'def ' + self.del_obj.__name__ + '(): ' + self.del_obj.__doc__)
+
+        index = -1
+        idx_array = -1
+        all_objects = [self.ships, self.forts, self.mines, self.torpedos]
+        for idx0, array in enumerate(all_objects):
+            for idx1, array_obj in enumerate(array):
+                if id(obj) == id(array_obj):
+                    idx_array = idx0
+                    index = idx1
+                    break
+        if (idx_array != -1) and (index != -1):
+            all_objects[idx_array].pop(index)

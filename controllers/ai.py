@@ -36,7 +36,7 @@ class AI:
         self.offset = (board.screen_x // 2, board.size_font)
         self.gamer = None
         self.player = Enemy(board, speech, phrases, self)
-        self.ai_step = True # if remove create_fleets else False
+        self.ai_step = False # if remove create_fleets else False
         self.create_fleets = False
 
     def set_text(self, text):
@@ -122,12 +122,16 @@ class AI:
         else:
             self.ship_destroy(controllers, obj, enemy)
 
+        for controller in controllers.values():
+            controller.fleet = None
+            controller.obj = None
+
     def fort_destroy(self, controllers, obj, enemy):
         """Destroy fort enemy."""
         self.log.info(__name__ + ': ' + 'def ' + self.fort_destroy.__name__ + '(): ' + self.fort_destroy.__doc__)
 
         if obj.name != 'mine' and obj.name != 'torpedo':
-            controllers['enemy'].forts.remove(enemy)
+            controllers['enemy'].del_obj(enemy)
             self.sounds.play('art_many')
             self.speech.speak(self.get_controller_phrase(controllers['enemy']), False)
             self.speech.speak(self.phrases['fort_captured'], False)
@@ -144,7 +148,7 @@ class AI:
             self.sounds.play('boom')
             self.speech.speak(self.get_controller_phrase(controllers['player']), False)
             self.speech.speak(self.phrases['torpedo_destroy'], False)
-            controllers['player'].torpedos.remove(obj)
+            controllers['player'].del_obj(obj)
             self.ship_remove(controllers['enemy'], enemy)
 
     def mine_destroy(self, p_controllers, p_obj, p_enemy):
@@ -159,7 +163,7 @@ class AI:
             self.sounds.play('boom')
             self.speech.speak(self.get_controller_phrase(controllers['player']), False)
             self.speech.speak(self.phrases['mine_destroy'], False)
-            controllers['player'].mines.remove(obj)
+            controllers['player'].del_obj(obj)
             if enemy.__class__.__name__ != 'Trawler':
                 self.ship_remove(controllers['enemy'], enemy)
 
@@ -167,8 +171,20 @@ class AI:
         """Destroy enemy object with ship."""
         self.log.info(__name__ + ': ' + 'def ' + self.ship_destroy.__name__ + '(): ' + self.ship_destroy.__doc__)
 
-        rate_obj = obj.rate if obj.fleet == 0 else controllers['player'].select_fleet(obj.fleet).get_ships_rate()
-        rate_enemy = enemy.rate if enemy.fleet == 0 else controllers['enemy'].select_fleet(enemy.fleet).get_ships_rate()
+        rate_obj = obj.rate
+        count_obj = 1
+        if obj.fleet != 0:
+            controllers['player'].select_fleet(obj.fleet)
+            rate_obj = controllers['player'].fleet.get_ships_rate()
+            count_obj = controllers['player'].fleet.get_ships_count()
+            controllers['player'].fleet = None
+        rate_enemy = enemy.rate
+        count_enemy = 1
+        if enemy.fleet != 0:
+            controllers['enemy'].select_fleet(enemy.fleet)
+            rate_enemy = controllers['enemy'].fleet.get_ships_rate()
+            count_enemy = controllers['enemy'].fleet.get_ships_count()
+            controllers['enemy'].fleet = None
         self.sounds.play('art')
         if obj.__class__.__name__ == 'Submarine' and enemy.__class__.__name__ == 'Battleship':
             self.ship_remove(controllers['enemy'], enemy, True)
@@ -179,8 +195,6 @@ class AI:
         elif rate_obj < rate_enemy:
             self.ship_remove(controllers['player'], obj, True)
         else:
-            count_obj = 1 if obj.fleet == 0 else controllers['player'].select_fleet(obj.fleet).get_ships_count()
-            count_enemy = 1 if enemy.fleet == 0 else controllers['enemy'].select_fleet(enemy.fleet).get_ships_count()
             if count_obj > count_enemy:
                 self.ship_remove(controllers['enemy'], enemy, True)
             elif count_obj < count_enemy:
@@ -196,14 +210,18 @@ class AI:
         self.sounds.play('destroy')
         self.speech.speak(self.get_controller_phrase(controller), False)
         self.speech.speak(self.phrases['ship_destroy'].format(ship.name), False)
-        controller.ships.remove(ship)
+        controller.del_obj(ship)
         fleet = None
         if ship.fleet > 0:
-            fleet = controller.select_fleet(ship.fleet)
+            controller.select_fleet(ship.fleet)
+            fleet = controller.fleet
         if fleet is not None:
-            fleet.ships.remove(ship)
+            fleet.del_ship(ship)
+            if fleet.get_ships_count() == 0:
+                fleet_remove = True
             if fleet_remove:
                 self.fleet_remove(controller, fleet)
+            controller.fleet = None
 
     def fleet_remove(self, controller, fleet):
         """Remove fleet if destroy."""
@@ -212,8 +230,8 @@ class AI:
         for f_ship in fleet.ships:
             self.sounds.play('destroy')
             self.speech.speak(self.phrases['ship_destroy'].format(f_ship.name), False)
-            fleet.ships.remove(f_ship)
-            controller.ships.remove(f_ship)
+            fleet.del_ship(f_ship)
+            controller.del_obj(f_ship)
         controller.fleets.remove(fleet)
 
     def get_controller_phrase(self, controller):

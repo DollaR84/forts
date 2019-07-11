@@ -66,7 +66,8 @@ class Enemy(Base):
                     fleet.ships[0].fleet = fleet.num
                     for ship in self.ships:
                         if ship.rate == fleet.ships[0].rate:
-                            id_ships.append(id(ship))
+                            if id(ship) != id(fleet.ships[0]):
+                                id_ships.append(id(ship))
                     continue
                 ship_id = random.choice(id_ships)
                 for ship in self.ships:

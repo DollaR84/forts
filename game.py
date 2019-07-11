@@ -121,9 +121,9 @@ class Game:
         self.handle_events_keydown_arrows(event)
         if pygame.K_ESCAPE == event.key:
             self.running = False
-        #elif pygame.K_SPACE == event.key and pygame.key.get_mods() & pygame.KMOD_SHIFT:
-        #    if not self.game_over and not self._ai.ai_step:
-        #        self.player.select(True)
+        elif pygame.K_SPACE == event.key and pygame.key.get_mods() & pygame.KMOD_SHIFT:
+            if not self.game_over and not self._ai.ai_step:
+                self.player.select(True)
         elif pygame.K_SPACE == event.key:
             if not self.game_over and not self._ai.ai_step:
                 self.player.select()
@@ -138,10 +138,10 @@ class Game:
             if not self.game_over and not self._ai.ai_step:
                 phrase = self.phrases['enemy_info'] % self._ai.player.info()
                 self.speech.speak(phrase, True)
-        #for key, num in self.handle_numbers.items():
-        #    if getattr(pygame, key) == event.key:
-        #        if not self.game_over:
-        #            self.player.select_fleet(num)
+        for key, num in self.handle_numbers.items():
+            if getattr(pygame, key) == event.key:
+                if not self.game_over and not self._ai.ai_step:
+                    self.player.select_fleet(num)
 
     def handle_events_keydown_functional(self, event):
         """Check functional keys."""
@@ -215,9 +215,9 @@ class Game:
         self.win = False
         self._ai.player.init()
         self.player.init()
-        #self.player.create_fleets()
-        self._ai.ai_step = True # if remove create_fleets
-        self._ai.next_step() # if remove create_fleets
+        self.player.create_fleets()
+        #self._ai.ai_step = True # if remove create_fleets
+        #self._ai.next_step() # if remove create_fleets
         self.player.speak()
 
     def help(self):
