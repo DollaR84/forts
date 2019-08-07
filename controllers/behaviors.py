@@ -41,7 +41,7 @@ class Behavior:
         self.cols = cols
         self.rows = rows
 
-        self.coordinates = [common.Coordinate(xy[0], xy[1]) for xy in list(product(range(self.cols), range(self.rows)))]
+        self.coordinates = [common.Coordinate(xy[0], xy[1]) for xy in list(product(range(self.rows), range(self.cols)))]
 
         self.player = None
         self.gamer = None
@@ -54,7 +54,7 @@ class Behavior:
         self.player = ai_.player
         self.gamer = ai_.gamer
 
-        self.analysis = Analysis(self.player, self.gamer)
+        self.analysis = Analysis(self.player, self.gamer, self.cols, self.rows)
 
     def scan(self):
         """Scan battle field and return generated field for behaviors algoritms."""
@@ -65,9 +65,9 @@ class Behavior:
             player_obj = self.player.get_obj(coordinate.x, coordinate.y)
             gamer_obj = self.gamer.get_obj(coordinate.x, coordinate.y)
             if player_obj is not None:
-                field[coordinate.y][coordinate.x] = Unit(False, player_obj)
+                field[coordinate.x][coordinate.y] = Unit(False, player_obj)
             elif gamer_obj is not None:
-                field[coordinate.y][coordinate.x] = Unit(True, gamer_obj)
+                field[coordinate.x][coordinate.y] = Unit(True, gamer_obj)
         return field
 
     def generate_objects(self, field, enemy):
@@ -92,6 +92,7 @@ class Behavior:
         self.analysis.field = self.scan()
         self.analysis.p_objects, self.analysis.p_forts = self.generate_objects(self.analysis.field, False)
         self.analysis.g_objects, self.analysis.g_forts = self.generate_objects(self.analysis.field, True)
+        self.analysis.set_field_dll()
         action = self.analysis.run()
         if action is not None:
             self.run_best_action(action)
