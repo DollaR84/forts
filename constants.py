@@ -20,8 +20,13 @@ class Colors:
     BLUE = (0, 0, 255)
     YELLOW = (255, 255, 0)
 
+    GOLD = (255, 215, 0)
+    ORANGE = (255, 165, 0)
+
     DARKGREEN = (0, 127, 0)
     CHARTREUSE = (127, 255, 0)
+
+    DEEPSKYBLUE = (0, 191, 255)
 
 
 class Letters:

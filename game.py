@@ -27,6 +27,8 @@ from controllers.ai import AI
 from controllers.player import DIR
 from controllers.player import Player
 
+from menu import Menu
+
 from speech import Speech
 
 from utils import Logger
@@ -67,6 +69,11 @@ class Game:
         self.music = Music(self.config.getfloat('audio', 'music_volume'))
         self.sounds = Sound(self.config.getfloat('audio', 'sound_volume'))
 
+        self.menu = Menu(self.config, self.screen, self.speech, self.phrases, self.sounds)
+        self.menu_flag = True
+        menu_functions = [self.new_game, self.rules, self.help, self.exit]
+        self.menu.set_functions(menu_functions)
+
         self.board = Board(self.config, self.screen, self.sounds)
         self._ai = AI(self.board, self.speech, self.phrases)
         self.player = Player(self.board, self.speech, self.phrases, self._ai)
@@ -83,7 +90,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.music_play()
-        self.new_game()
+        self.menu.activate(self.menu_flag)
 
     def mainloop(self):
         """Run main loop game."""
@@ -93,7 +100,10 @@ class Game:
             self.handle_events()
             if self._ai.ai_step:
                 self._ai.player.step()
-            self.draw()
+            if self.menu_flag:
+                self.menu.draw()
+            else:
+                self.draw()
             if not self.game_over:
                 self.check_win()
 
@@ -106,6 +116,14 @@ class Game:
         if self.config.getboolean('total', 'debug'):
             self.logger.finish()
         pygame.quit()
+
+    def exit(self):
+        """Exit from game in menu."""
+        self.log.info(__name__ + ': ' + 'def ' + self.exit.__name__ + '(): ' + self.exit.__doc__)
+
+        self.menu_flag = not self.menu_flag
+        self.menu.activate(self.menu_flag)
+        self.running = False
 
     def handle_events(self):
         """Check all game events."""
@@ -120,27 +138,34 @@ class Game:
         self.handle_events_keydown_functional(event)
         self.handle_events_keydown_arrows(event)
         if pygame.K_ESCAPE == event.key:
-            self.running = False
+            if not self.game_over:
+                self.menu_flag = not self.menu_flag
+                self.menu.activate(self.menu_flag)
         elif pygame.K_SPACE == event.key and pygame.key.get_mods() & pygame.KMOD_SHIFT:
-            if not self.game_over and not self._ai.ai_step:
+            if not self.menu_flag and not self.game_over and not self._ai.ai_step:
                 self.player.select(True)
         elif pygame.K_SPACE == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if self.menu_flag:
+                self.menu.click()
+            elif not self.game_over and not self._ai.ai_step:
                 self.player.select()
+        elif pygame.K_RETURN == event.key:
+            if self.menu_flag:
+                self.menu.click()
         elif pygame.K_c == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if not self.menu_flag and not self.game_over and not self._ai.ai_step:
                 self.speech.speak(self.player.cell.pos, True)
         elif pygame.K_p == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if not self.menu_flag and not self.game_over and not self._ai.ai_step:
                 phrase = self.phrases['your_info'] % self.player.info()
                 self.speech.speak(phrase, True)
         elif pygame.K_e == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if not self.menu_flag and not self.game_over and not self._ai.ai_step:
                 phrase = self.phrases['enemy_info'] % self._ai.player.info()
                 self.speech.speak(phrase, True)
         for key, num in self.handle_numbers.items():
             if getattr(pygame, key) == event.key:
-                if not self.game_over and not self._ai.ai_step:
+                if not self.menu_flag and not self.game_over and not self._ai.ai_step:
                     self.player.select_fleet(num)
 
     def handle_events_keydown_functional(self, event):
@@ -157,16 +182,20 @@ class Game:
     def handle_events_keydown_arrows(self, event):
         """Check arrows keys."""
         if pygame.K_LEFT == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if not self.menu_flag and not self.game_over and not self._ai.ai_step:
                 self.player.move(DIR.left)
         elif pygame.K_RIGHT == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if not self.menu_flag and not self.game_over and not self._ai.ai_step:
                 self.player.move(DIR.right)
         elif pygame.K_UP == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if self.menu_flag:
+                self.menu.change_button(-1)
+            elif not self.game_over and not self._ai.ai_step:
                 self.player.move(DIR.up)
         elif pygame.K_DOWN == event.key:
-            if not self.game_over and not self._ai.ai_step:
+            if self.menu_flag:
+                self.menu.change_button(1)
+            elif not self.game_over and not self._ai.ai_step:
                 self.player.move(DIR.down)
 
     def draw(self):
@@ -210,6 +239,8 @@ class Game:
         """Start new game."""
         self.log.info(__name__ + ': ' + 'def ' + self.new_game.__name__ + '(): ' + self.new_game.__doc__)
 
+        self.menu_flag = not self.menu_flag
+        self.menu.activate(self.menu_flag)
         self.speech.speak(self.phrases['new_game'], True)
         self.game_over = False
         self.win = False
@@ -228,6 +259,15 @@ class Game:
         with open('help.dat', 'rb') as help_file:
             data = pickle.load(help_file)
             for line in [line for line in data[language] if line != '\n']:
+                self.speech.speak(line, False)
+
+    def rules(self):
+        """Speak help for rules game."""
+        self.log.info(__name__ + ': ' + 'def ' + self.rules.__name__ + '(): ' + self.rules.__doc__)
+
+        with open('help.dat', 'rb') as help_file:
+            data = pickle.load(help_file)
+            for line in [line for line in data['rules'] if line != '\n']:
                 self.speech.speak(line, False)
 
     def turn_music(self):
