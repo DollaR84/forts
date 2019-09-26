@@ -33,6 +33,7 @@ ext_modules = [
                Extension("constants", ["constants.py"]),
                Extension("game", ["game.py"]),
                Extension("loader", ["loader.py"]),
+               Extension("menu", ["menu.py"]),
                Extension("processes", ["processes.py"]),
                Extension("speech", ["speech.py"]),
                Extension("Tolk", ["Tolk.py"]),

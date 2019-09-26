@@ -102,6 +102,7 @@ class Menu:
         if flag:
             self.sounds.play('menu')
             self.speech.speak(self.phrases['menu_caption'], True)
+            self.speech.speak(self.phrases['menu_buttons'][self.__current], True)
         else:
             self.sounds.play('close')
 
