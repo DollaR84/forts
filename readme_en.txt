@@ -4,7 +4,7 @@ Author: Ruslan Dolovanyuk aka DollaR
 Version: 1.4
 
 Keys:
-Escape - exit;
+Escape - menu;
 F1 - help;
 F2 - on/off background sound;
 F5 - new game;
